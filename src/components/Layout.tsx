@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { Bot, FileText, Github, HelpCircle, LayoutDashboard, Linkedin, Mail, Shield, Zap } from "lucide-react";
+import { Bot, FileText, Github, HelpCircle, LayoutDashboard, Linkedin, Mail, Menu, Shield, X, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -12,6 +13,7 @@ const navItems = [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-background selection:bg-primary/30">
@@ -21,15 +23,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
         animate={{ y: 0 }}
         className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl"
       >
-        <div className="container flex h-16 items-center">
-          <Link to="/" className="flex items-center space-x-2 group">
+        <div className="container flex h-16 items-center justify-between px-4 sm:px-6">
+          <Link to="/" className="flex items-center space-x-2 group shrink-0">
             <div className="p-1 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-all duration-500 group-hover:rotate-[360deg] group-hover:scale-110">
               <img src="/Favicon.png" alt="AutoDesk AI Logo" className="h-8 w-8" />
             </div>
             <span className="font-bold text-xl ml-2 text-math-gradient transition-all duration-300 group-hover:tracking-wider">AutoDesk AI</span>
           </Link>
 
-          <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
             {navItems.map((item) => {
               const isActive = location.pathname === item.to;
               return (
@@ -44,16 +47,70 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   )}
                 >
                   <item.icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12" />
-                  <span className="hidden sm:inline font-bold">{item.label}</span>
+                  <span className="font-bold">{item.label}</span>
                 </Link>
               );
             })}
           </div>
+
+          {/* Mobile Menu Button - "Three Lines" Hamburger */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex flex-col items-center justify-center w-10 h-10 space-y-1.5 md:hidden text-muted-foreground hover:text-primary transition-colors focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            <motion.span
+              animate={isMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+              className="w-6 h-0.5 bg-current rounded-full origin-center"
+            />
+            <motion.span
+              animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+              className="w-6 h-0.5 bg-current rounded-full"
+            />
+            <motion.span
+              animate={isMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+              className="w-6 h-0.5 bg-current rounded-full origin-center"
+            />
+          </button>
         </div>
+
+        {/* Mobile Navigation Dropdown */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden border-t border-white/5 bg-background/95 backdrop-blur-xl overflow-hidden shadow-2xl"
+            >
+              <div className="container py-4 space-y-2 px-4">
+                {navItems.map((item) => {
+                  const isActive = location.pathname === item.to;
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={cn(
+                        "group flex items-center space-x-4 px-6 py-4 rounded-2xl text-lg font-bold transition-all duration-300",
+                        isActive
+                          ? "bg-primary/15 text-primary shadow-[inset_0_0_20px_rgba(34,197,94,0.1)]"
+                          : "text-muted-foreground hover:bg-white/10 hover:text-foreground"
+                      )}
+                    >
+                      <item.icon className={cn("h-6 w-6 transition-transform", isActive ? "scale-110" : "group-hover:scale-125")} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {children}
       </main>
 
