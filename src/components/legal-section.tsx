@@ -69,9 +69,12 @@ export function LegalSection({ variant = "both" }: LegalSectionProps) {
           {variant === "terms" && <Scale className="h-7 w-7 transition-all duration-500 group-hover/header:-rotate-12 opacity-80" />}
           {variant === "privacy" && <Fingerprint className="h-7 w-7 transition-all duration-500 group-hover/header:-rotate-12 opacity-80" />}
         </h2>
-        <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/20 text-accent-foreground transition-all duration-500 group-hover/header:rotate-12 group-hover/header:scale-110 group-hover/header:bg-accent/30">
+        <motion.div
+          whileHover={{ scale: 1.2, y: -5 }}
+          className="mt-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/20 text-accent-foreground transition-all duration-500 group-hover/header:bg-accent/30"
+        >
           <FileCheck2 className="h-6 w-6" />
-        </div>
+        </motion.div>
         <p className="text-sm text-center text-muted-foreground mt-3 max-w-md">
           {variant === "terms"
             ? "Rules for operating the agent, connected tools, and generated outputs."
