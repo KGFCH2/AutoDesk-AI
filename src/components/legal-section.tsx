@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { BadgeCheck, FileCheck2, Fingerprint, Gavel, Lock, Scale, ShieldCheck } from "lucide-react";
 
 const termsHighlights = [
