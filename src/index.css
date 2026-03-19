@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: "Comic Sans MS", "Comic Sans", "Cambria Math", cursive, serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Cambria Math", "Comic Sans MS", serif, cursive;
+  }
+
+  :root {
+    --background: 220 20% 7%;
+    --foreground: 210 20% 92%;
+
+    --card: 220 18% 10%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 220 18% 10%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 142 76% 45%;
+    /* Deep Forest Green */
+    --primary-foreground: 142 20% 98%;
+
+    --secondary: 145 30% 12%;
+    /* Dark Moss */
+    --secondary-foreground: 142 20% 90%;
+
+    --muted: 150 20% 12%;
+    --muted-foreground: 150 10% 60%;
+
+    --accent: 142 80% 60%;
+    /* Bright Neon Green */
+    --accent-foreground: 142 20% 10%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 145 20% 18%;
+    --input: 145 20% 18%;
+    --ring: 142 76% 45%;
+
+    --radius: 1rem;
+
+    --success: 142 70% 50%;
+    --warning: 45 90% 50%;
+    --info: 160 80% 50%;
+
+    --sidebar-background: 145 30% 10%;
+    --sidebar-foreground: 142 20% 85%;
+    --sidebar-primary: 142 76% 45%;
+    --sidebar-primary-foreground: 220 20% 7%;
+    --sidebar-accent: 220 16% 16%;
+    --sidebar-accent-foreground: 210 20% 85%;
+    --sidebar-border: 220 14% 18%;
+    --sidebar-ring: 142 70% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    background-image: radial-gradient(circle at 50% 50%, hsl(145 30% 10%), hsl(145 40% 5%));
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Cambria Math", "Cambria", serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.02em;
+  }
+
+  p,
+  span,
+  div {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+  }
+
+  code,
+  pre,
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .scroll-reveal {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Glassmorphism */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  /* Utility Fonts */
+  .font-comic {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+  }
+
+  .font-math {
+    font-family: "Cambria Math", "Cambria", serif;
+  }
+
+  .text-comic-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, #ff7eb3, #ff758c, #ff7eb3);
+  }
+
+  .text-math-gradient {
+    @apply bg-clip-text text-transparent italic;
+    background-image: linear-gradient(to right, #22c55e, #10b981, #34d399);
+    font-family: "Cambria Math", "Cambria", serif;
+  }
+
+  .bg-playful-1 {
+    background: linear-gradient(135deg, hsl(142 76% 45% / 0.15), hsl(160 80% 50% / 0.1));
+  }
+
+  .bg-playful-2 {
+    background: linear-gradient(135deg, hsl(160 80% 50% / 0.1), hsl(142 80% 60% / 0.1));
+  }
+
+  .glow-green {
+    box-shadow: 0 0 25px hsl(142 76% 45% / 0.2), 0 0 70px hsl(142 76% 45% / 0.1);
+  }
+
+  .glow-green-strong {
+    box-shadow: 0 0 35px hsl(142 76% 45% / 0.4), 0 0 90px hsl(142 76% 45% / 0.2);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(142 76% 45%), hsl(160 80% 50%));
+  }
+}
