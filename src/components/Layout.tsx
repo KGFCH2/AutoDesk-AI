@@ -23,7 +23,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl"
+        className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/40 backdrop-blur-2xl"
       >
         <div className="container flex h-16 items-center justify-between px-4 sm:px-6">
           <Link to="/" className="flex items-center space-x-2 group shrink-0">
@@ -119,37 +119,37 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Footer */}
       <footer className="w-full border-t border-white/5 bg-black/20 backdrop-blur-sm mt-auto py-8 group/footer">
         <div className="container mx-auto px-4 flex flex-col items-center gap-6">
-          <div className="flex flex-col items-center gap-1 text-center">
-            <div className="flex items-center space-x-3 justify-center">
-              <div className="p-1 rounded-lg bg-primary/10 transition-all duration-300 group-hover/footer:bg-primary/20 group-hover/footer:scale-110">
-                <img src="/Favicon.png" alt="AutoDesk AI" className="h-6 w-6 transition-all duration-500 group-hover/footer:rotate-[360deg]" />
+          <div className="flex flex-col items-center gap-1 text-center w-full">
+            <div className="flex flex-col items-center gap-3">
+              <div className="p-1.5 rounded-xl bg-primary/10 transition-all duration-300 group-hover/footer:bg-primary/20 group-hover/footer:scale-110">
+                <img src="/Favicon.png" alt="AutoDesk AI" className="h-7 w-7 transition-all duration-500 group-hover/footer:rotate-[360deg]" />
               </div>
-              <div className="flex flex-col text-left">
-                <span className="text-sm font-bold text-foreground">AutoDesk AI</span>
-                <span className="text-[10px] text-muted-foreground italic font-comic">
+              <div className="flex flex-col items-center">
+                <span className="text-base font-bold text-foreground">AutoDesk AI</span>
+                <span className="text-xs text-muted-foreground italic font-comic">
                   Technical exploration by Babin Bid
                 </span>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-3 mt-2 text-[10px] text-muted-foreground/60 font-mono">
-              <a href="https://github.com/KGFCH2/AutoDesk-AI" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-primary transition-colors group/link">
-                <Github className="h-3 w-3 group-hover/link:animate-bounce" /> GitHub
+            <div className="flex items-center justify-center gap-4 mt-3 text-[11px] text-muted-foreground/60 font-mono">
+              <a href="https://github.com/KGFCH2/AutoDesk-AI" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors group/link px-2">
+                <Github className="h-3.5 w-3.5 group-hover/link:animate-bounce" /> GitHub
               </a>
-              <span className="w-1 h-1 rounded-full bg-white/10" />
-              <a href="mailto:babinbid05@gmail.com" className="flex items-center gap-1 hover:text-primary transition-colors group/link">
-                <Mail className="h-3 w-3 group-hover/link:animate-bounce" /> Email
+              <span className="w-1.5 h-1.5 rounded-full bg-white/10" />
+              <a href="mailto:babinbid05@gmail.com" className="flex items-center gap-1.5 hover:text-primary transition-colors group/link px-2">
+                <Mail className="h-3.5 w-3.5 group-hover/link:animate-bounce" /> Email
               </a>
-              <span className="w-1 h-1 rounded-full bg-white/10" />
-              <a href="https://linkedin.com/in/babinbid123" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-primary transition-colors group/link">
-                <Linkedin className="h-3 w-3 group-hover/link:animate-bounce" /> LinkedIn
+              <span className="w-1.5 h-1.5 rounded-full bg-white/10" />
+              <a href="https://linkedin.com/in/babinbid123" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors group/link px-2">
+                <Linkedin className="h-3.5 w-3.5 group-hover/link:animate-bounce" /> LinkedIn
               </a>
             </div>
           </div>
-          <div className="flex flex-col items-center gap-1 text-center">
-            <div className="text-sm font-medium text-muted-foreground">
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="text-sm font-medium text-muted-foreground/80">
               © 2026 <span className="text-math-gradient font-bold">AutoDesk AI</span>. Developed by Babin Bid.
             </div>
-            <div className="text-[10px] text-muted-foreground/50 font-mono uppercase tracking-widest">
+            <div className="text-[10px] text-muted-foreground/40 font-mono uppercase tracking-[0.2em]">
               Knowledge Acquisition Project • V1.0.0
             </div>
           </div>

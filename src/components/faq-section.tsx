@@ -87,7 +87,7 @@ const faqItems: FAQItem[] = [
 
 export function FAQSection() {
   return (
-    <section aria-labelledby="faq-title" className="space-y-5">
+    <section aria-labelledby="faq-title" className="space-y-5 -mt-4 md:-mt-6">
       <div className="flex flex-col items-center group/header">
         <h2 id="faq-title" className="text-3xl font-bold tracking-tighter text-primary flex flex-wrap items-center justify-center gap-x-4 gap-y-2 transition-all group-hover/header:scale-[1.02] text-center">
           <MessageCircleQuestion className="h-7 w-7 transition-all duration-500 group-hover/header:rotate-[360deg] opacity-80" />

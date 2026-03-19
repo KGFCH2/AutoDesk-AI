@@ -61,7 +61,7 @@ export function LegalSection({ variant = "both" }: LegalSectionProps) {
   const showPrivacy = variant === "both" || variant === "privacy";
 
   return (
-    <section aria-labelledby="legal-title" className="space-y-5">
+    <section aria-labelledby="legal-title" className="space-y-5 -mt-4 md:-mt-8 lg:-mt-10">
       <div className="flex flex-col items-center group/header">
         <h2 id="legal-title" className="text-3xl font-bold tracking-tighter text-accent flex items-center justify-center gap-4 transition-all group-hover/header:scale-[1.02]">
           {variant === "terms" && <Scale className="h-7 w-7 transition-all duration-500 group-hover/header:rotate-12 opacity-80" />}
