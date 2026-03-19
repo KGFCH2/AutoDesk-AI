@@ -1,6 +1,15 @@
 # 🤖 AutoDesk AI – Notion Execution Agent
 
-AutoDesk AI is a smooth, mobile-friendly Notion-controlled execution dashboard with scroll animations, built with React, TypeScript, Tailwind CSS, and direct Notion API integration.
+**Created by [Babin Bid](https://github.com/KGFCH2)**
+
+AutoDesk AI is a technical project developed to explore the intersection of Notion API automation and AI classification. This project serves as a comprehensive learning exercise in building professional-grade execution dashboards.
+
+## 👤 Developer Profile
+
+- **Developer**: Babin Bid
+- **GitHub**: [KGFCH2](https://github.com/KGFCH2)
+- **Email**: [babinbid05@gmail.com](mailto:babinbid05@gmail.com)
+- **LinkedIn**: [babinbid123](https://linkedin.com/in/babinbid123)
 
 ## ✨ What it does
 
