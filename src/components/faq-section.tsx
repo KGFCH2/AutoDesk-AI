@@ -94,9 +94,12 @@ export function FAQSection() {
           Frequently Asked Questions
           <MessageCircleQuestion className="h-7 w-7 transition-all duration-500 group-hover/header:rotate-[-360deg] opacity-80" />
         </h2>
-        <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover/header:rotate-[180deg] group-hover/header:scale-110 group-hover/header:bg-primary/20">
+        <motion.div
+          whileHover={{ scale: 1.2, y: -5 }}
+          className="mt-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:bg-primary/20"
+        >
           <Bot className="h-6 w-6" />
-        </div>
+        </motion.div>
         <p className="text-sm text-center text-muted-foreground transition-all group-hover/header:italic mt-3 max-w-md">
           Answers to the most common product, workflow, and safety questions.
         </p>
