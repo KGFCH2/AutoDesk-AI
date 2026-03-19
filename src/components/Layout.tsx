@@ -3,6 +3,7 @@ import { Bot, FileText, Github, HelpCircle, LayoutDashboard, Linkedin, Mail, Men
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { ScrollToTop } from "./ui/scroll-to-top";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -17,6 +18,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-background selection:bg-primary/30">
+      <ScrollToTop />
       {/* Navigation */}
       <motion.nav
         initial={{ y: -100 }}
@@ -116,20 +118,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Footer */}
       <footer className="w-full border-t border-white/5 bg-black/20 backdrop-blur-sm mt-auto py-8 group/footer">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center space-x-3">
+        <div className="container mx-auto px-4 flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-1 text-center">
+            <div className="flex items-center space-x-3 justify-center">
               <div className="p-1 rounded-lg bg-primary/10 transition-all duration-300 group-hover/footer:bg-primary/20 group-hover/footer:scale-110">
                 <img src="/Favicon.png" alt="AutoDesk AI" className="h-6 w-6 transition-all duration-500 group-hover/footer:rotate-[360deg]" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="text-sm font-bold text-foreground">AutoDesk AI</span>
                 <span className="text-[10px] text-muted-foreground italic font-comic">
                   Technical exploration by Babin Bid
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground/60 font-mono">
+            <div className="flex items-center justify-center gap-3 mt-2 text-[10px] text-muted-foreground/60 font-mono">
               <a href="https://github.com/KGFCH2/AutoDesk-AI" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-primary transition-colors group/link">
                 <Github className="h-3 w-3 group-hover/link:animate-bounce" /> GitHub
               </a>
@@ -143,7 +145,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </a>
             </div>
           </div>
-          <div className="flex flex-col items-center md:items-end gap-1">
+          <div className="flex flex-col items-center gap-1 text-center">
             <div className="text-sm font-medium text-muted-foreground">
               © 2026 <span className="text-math-gradient font-bold">AutoDesk AI</span>. Developed by Babin Bid.
             </div>
