@@ -59,10 +59,13 @@ export function LoadingScreen() {
             </motion.div>
           ))}
         </div>
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 border-2 border-primary/20 shadow-2xl shadow-primary/20 backdrop-blur-xl"
-                >
+
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 border-2 border-primary/20 shadow-2xl shadow-primary/20 backdrop-blur-xl"
+        >
                     <img src="/Favicon.png" alt="Logo" className="h-16 w-16" />
 
                     <motion.div
