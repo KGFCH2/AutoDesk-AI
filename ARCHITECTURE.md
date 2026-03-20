@@ -51,6 +51,7 @@ graph TD
 ---
 
 ## 🔗 Connect & Explore
+
 **Developed with precision by [Babin Bid](https://github.com/KGFCH2)**  
 *Neural Integration | Autonomous Systems | Motion UI*
 
