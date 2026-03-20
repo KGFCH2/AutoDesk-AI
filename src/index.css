@@ -109,6 +109,7 @@
 @layer utilities {
   .scroll-reveal {
     animation: reveal linear both;
+
     @supports (animation-timeline: view()) {
       animation-timeline: view();
       animation-range: entry 10% cover 30%;
