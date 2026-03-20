@@ -21,7 +21,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20">
       <ScrollToTop />
-      
+
       {/* Navigation */}
       <motion.nav
         initial={{ y: -100 }}
@@ -29,8 +29,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/60 backdrop-blur-xl"
       >
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             onClick={() => {
               if (location.pathname === "/") {
                 window.scrollTo({ top: 0, behavior: "smooth" });
@@ -67,7 +67,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             })}
             <div className="h-4 w-px bg-white/10 mx-2" />
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link 
+              <Link
                 to="/dashboard"
                 className={cn(buttonVariants({ size: "sm" }), "ml-2 rounded-full px-6 shadow-lg shadow-primary/30 font-bold transition-all")}
               >
@@ -107,8 +107,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 ))}
                 <div className="pt-2 px-4">
-                  <Link 
-                    to="/dashboard" 
+                  <Link
+                    to="/dashboard"
                     onClick={() => setIsMenuOpen(false)}
                     className={cn(buttonVariants({ size: "lg" }), "w-full rounded-xl font-bold")}
                   >
@@ -131,10 +131,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <footer className="w-full border-t border-white/5 py-16 bg-black/60 relative overflow-hidden">
         {/* Subtle glow effect */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        
+
         <div className="container mx-auto px-4 flex flex-col items-center text-center gap-10">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             onClick={() => {
               if (location.pathname === "/") {
                 window.scrollTo({ top: 0, behavior: "smooth" });
@@ -147,7 +147,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
             <span className="font-bold text-2xl tracking-normal text-math-gradient px-4 pr-6">AutoDesk AI</span>
           </Link>
-          
+
           <nav className="flex flex-wrap flex-col sm:flex-row items-center justify-center gap-6 md:gap-12 text-sm font-bold uppercase tracking-widest">
             {navItems.map((link) => (
               <Link key={link.to} to={link.to} className="text-muted-foreground hover:text-white transition-all hover:scale-110 flex items-center gap-2">
@@ -168,12 +168,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
               FAQ
             </Link>
           </nav>
-          
+
           <div className="pt-6 border-t border-white/5 w-full flex flex-col items-center gap-3">
             <p className="text-xs text-muted-foreground/60 font-medium">
               © 2026 AutoDesk AI. All rights reserved. Precision-built automation.
             </p>
-            <motion.p 
+            <motion.p
               whileHover={{ scale: 1.1 }}
               className="text-sm font-black text-primary italic tracking-wider uppercase cursor-default"
             >
