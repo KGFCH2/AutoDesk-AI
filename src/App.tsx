@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
+import Index from "./pages/index.tsx";
 import Dashboard from "./pages/dashboard.tsx";
 import Terms from "./pages/terms.tsx";
 import Privacy from "./pages/privacy.tsx";
