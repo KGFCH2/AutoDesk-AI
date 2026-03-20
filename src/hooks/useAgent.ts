@@ -39,8 +39,8 @@ const NOTION_VERSION = "2022-06-28";
 async function fetchTasks(apiKey: string, dbId: string, showHistory: boolean = false): Promise<NotionTask[]> {
   const url = `${NOTION_API}/databases/${dbId}/query`;
   console.log('Fetching tasks from:', url, 'History:', showHistory);
-  
-  const body: { filter?: any } = {};
+
+  const body: { filter?: { property: string; status: { equals: string } } } = {};
   if (!showHistory) {
     body.filter = {
       property: "Status",
