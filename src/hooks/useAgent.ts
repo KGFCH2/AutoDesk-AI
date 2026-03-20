@@ -12,11 +12,13 @@ interface NotionTask {
   id: string;
   title: string;
   status: string;
+  lastEditedTime: string;
 }
 
 interface NotionPage {
   id: string;
   properties: Record<string, NotionTitleProperty | NotionStatusProperty | unknown>;
+  last_edited_time: string;
 }
 
 interface NotionTitleProperty {
@@ -30,13 +32,22 @@ interface NotionStatusProperty {
 }
 
 const NOTION_API = window.location.hostname === 'localhost' ? "/api-notion" : "https://api.notion.com/v1";
-const OPENAI_API = window.location.hostname === 'localhost' ? "/api-openai" : "https://api.openai.com/v1";
+const GROQ_API = window.location.hostname === 'localhost' ? "/api-groq" : "https://api.groq.com/openai/v1";
 const NOTION_VERSION = "2022-06-28";
 
 // Fetch tasks from Notion
-async function fetchTasks(apiKey: string, dbId: string): Promise<NotionTask[]> {
+async function fetchTasks(apiKey: string, dbId: string, showHistory: boolean = false): Promise<NotionTask[]> {
   const url = `${NOTION_API}/databases/${dbId}/query`;
-  console.log('Fetching tasks from:', url);
+  console.log('Fetching tasks from:', url, 'History:', showHistory);
+  
+  const body: { filter?: any } = {};
+  if (!showHistory) {
+    body.filter = {
+      property: "Status",
+      status: { equals: "To Do" },
+    };
+  }
+
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -44,12 +55,7 @@ async function fetchTasks(apiKey: string, dbId: string): Promise<NotionTask[]> {
       "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      filter: {
-        property: "Status",
-        status: { equals: "To Do" },
-      },
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -68,25 +74,28 @@ async function fetchTasks(apiKey: string, dbId: string): Promise<NotionTask[]> {
       titleProp?.title?.[0]?.plain_text || "Untitled";
     const statusProp = page.properties.Status as NotionStatusProperty | undefined;
     const status = statusProp?.status?.name || "Unknown";
-    return { id: page.id, title, status };
+    return { id: page.id, title, status, lastEditedTime: page.last_edited_time };
   });
 }
 
-// Classify task using AI
+// Classify task using Groq AI
 async function classifyTask(
   task: string,
-  openaiKey: string
+  groqKey: string
 ): Promise<{ action: string; details: string }> {
+  // Use a fast model for classification
+  const model = "llama-3.1-8b-instant";
+
   const res = await fetch(
-    `${OPENAI_API}/chat/completions`,
+    `${GROQ_API}/chat/completions`,
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${openaiKey}`,
+        Authorization: `Bearer ${groqKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: model,
         messages: [
           {
             role: "system",
@@ -98,14 +107,15 @@ Return ONLY valid JSON, no markdown.`,
           },
           { role: "user", content: task },
         ],
+        temperature: 0,
       }),
     }
   );
 
   if (!res.ok) {
-    if (res.status === 429) throw new Error("Rate limited. Try again later.");
-    if (res.status === 402) throw new Error("Credits exhausted. Add funds.");
-    throw new Error(`AI classify failed [${res.status}]`);
+    if (res.status === 429) throw new Error("Groq Rate limited. Try again later.");
+    const errorBody = await res.text();
+    throw new Error(`Groq classify failed [${res.status}]: ${errorBody}`);
   }
 
   const data = await res.json();
@@ -117,13 +127,16 @@ Return ONLY valid JSON, no markdown.`,
   }
 }
 
-// Execute the task using AI
+// Execute the task using Groq AI
 async function executeTask(
   task: string,
   action: string,
   details: string,
-  openaiKey: string
+  groqKey: string
 ): Promise<string> {
+  // Use a more capable model for execution
+  const model = "llama-3.3-70b-versatile";
+
   const systemPrompts: Record<string, string> = {
     generate_content: `You are a professional content writer. Generate high-quality content based on the task. Be concise but thorough.`,
     search_web: `You are a research assistant. Provide a well-structured summary of current knowledge on the topic. Include key findings and trends.`,
@@ -132,15 +145,15 @@ async function executeTask(
   };
 
   const res = await fetch(
-    "https://api.openai.com/v1/chat/completions",
+    `${GROQ_API}/chat/completions`,
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${openaiKey}`,
+        Authorization: `Bearer ${groqKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: model,
         messages: [
           {
             role: "system",
@@ -156,9 +169,9 @@ async function executeTask(
   );
 
   if (!res.ok) {
-    if (res.status === 429) throw new Error("Rate limited. Try again later.");
-    if (res.status === 402) throw new Error("Credits exhausted. Add funds.");
-    throw new Error(`AI execute failed [${res.status}]`);
+    if (res.status === 429) throw new Error("Groq Rate limited. Try again later.");
+    const errorBody = await res.text();
+    throw new Error(`Groq execute failed [${res.status}]: ${errorBody}`);
   }
 
   const data = await res.json();
@@ -205,7 +218,7 @@ async function updateNotionTask(
             rich_text: [
               {
                 type: "text",
-                text: { content: `AutoDesk AI Output:\n${truncated}` },
+                text: { content: `AutoDesk AI Output (via Groq):\n${truncated}` },
               },
             ],
           },
@@ -216,6 +229,7 @@ async function updateNotionTask(
 }
 
 export function useAgent() {
+  const [showHistory, setShowHistory] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [tasks, setTasks] = useState<NotionTask[]>([]);
@@ -229,17 +243,17 @@ export function useAgent() {
 
   const fetchTasksFromNotion = useCallback(async () => {
     setIsFetching(true);
-    addLog("Fetching tasks from Notion...");
+    addLog(showHistory ? "Fetching all tasks (history included)..." : "Fetching pending tasks from Notion...");
     try {
       const apiKey = import.meta.env.VITE_NOTION_API_KEY;
       const dbId = import.meta.env.VITE_NOTION_DATABASE_ID;
       if (!apiKey || !dbId) {
-        throw new Error("Notion API key or database ID not configured");
+        throw new Error("Notion API configuration missing");
       }
-      const tasks = await fetchTasks(apiKey, dbId);
+      const tasks = await fetchTasks(apiKey, dbId, showHistory);
       setTasks(tasks);
-      addLog(`Found ${tasks.length} pending tasks`);
-      toast.success(`Found ${tasks.length} pending tasks`);
+      addLog(`Found ${tasks.length} tasks`);
+      toast.success(`Found ${tasks.length} tasks`);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       addLog(`Error: ${errorMessage}`);
@@ -247,19 +261,20 @@ export function useAgent() {
     } finally {
       setIsFetching(false);
     }
-  }, [addLog]);
+  }, [addLog, showHistory]);
 
   const runAgent = useCallback(async () => {
     setIsRunning(true);
     setResults([]);
-    addLog("🚀 Starting agent run...");
-    toast.info("Agent is running...");
+    addLog("🚀 Starting Groq-powered agent...");
+    toast.info("Agent is preparing to run...");
     try {
       const apiKey = import.meta.env.VITE_NOTION_API_KEY;
       const dbId = import.meta.env.VITE_NOTION_DATABASE_ID;
-      const openaiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!apiKey || !dbId || !openaiKey) {
-        throw new Error("API keys not configured");
+      const groqKey = import.meta.env.VITE_GROQ_API_KEY;
+
+      if (!apiKey || !dbId || !groqKey) {
+        throw new Error("Configuration missing: Notion API and Groq API keys are required");
       }
 
       const tasks = await fetchTasks(apiKey, dbId);
@@ -278,7 +293,7 @@ export function useAgent() {
           addLog(`Processing: ${task.title}`);
 
           // Step 1: Classify
-          const classification = await classifyTask(task.title, openaiKey);
+          const classification = await classifyTask(task.title, groqKey);
           addLog(`Classified as: ${classification.action}`);
 
           // Step 2: Execute
@@ -286,7 +301,7 @@ export function useAgent() {
             task.title,
             classification.action,
             classification.details,
-            openaiKey
+            groqKey
           );
           addLog(`Executed: ${task.title}`);
 
@@ -298,18 +313,20 @@ export function useAgent() {
             task: task.title,
             action: classification.action,
             status: "completed",
-            output: output.slice(0, 500),
+            output: output, // Show full text
           });
         } catch (err) {
-          addLog(`Failed task ${task.title}: ${err instanceof Error ? err.message : "Unknown error"}`);
+          const errMsg = err instanceof Error ? err.message : "Unknown error";
+          addLog(`Failed task ${task.title}: ${errMsg}`);
           results.push({
             task: task.title,
             action: "error",
             status: "failed",
-            output: err instanceof Error ? err.message : "Unknown error",
+            output: errMsg,
           });
         }
       }
+
 
       setResults(results);
       const completed = results.filter(
@@ -330,5 +347,5 @@ export function useAgent() {
     }
   }, [addLog, fetchTasksFromNotion]);
 
-  return { isRunning, isFetching, tasks, results, logs, fetchTasks: fetchTasksFromNotion, runAgent };
+  return { isRunning, isFetching, tasks, results, logs, showHistory, setShowHistory, fetchTasks: fetchTasksFromNotion, runAgent };
 }
