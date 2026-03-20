@@ -12,60 +12,60 @@ export function LoadingScreen() {
             <div className="relative">
                 <motion.div
                     animate={{
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute -inset-16 bg-primary/20 blur-[100px] rounded-full"
-        />
-        
-        {/* Mandala Spinning Circles */}
-        <div className="absolute inset-0 flex items-center justify-center scale-[2.5]">
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
-              transition={{
-                duration: 10 + i * 5,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="absolute inset-0"
-            >
-              <svg viewBox="0 0 100 100" className="w-full h-full opacity-20 overflow-visible">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r={30 + i * 8}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="0.5"
-                  strokeDasharray="1, 4"
-                  className="text-primary"
+                        scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                    }}
+                    className="absolute -inset-16 bg-primary/20 blur-[100px] rounded-full"
                 />
-                {[...Array(12)].map((_, j) => (
-                  <circle
-                    key={j}
-                    cx={50 + (30 + i * 8) * Math.cos((j * 30 * Math.PI) / 180)}
-                    cy={50 + (30 + i * 8) * Math.sin((j * 30 * Math.PI) / 180)}
-                    r="1.5"
-                    className="fill-primary"
-                  />
-                ))}
-              </svg>
-            </motion.div>
-          ))}
-        </div>
 
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 border-2 border-primary/20 shadow-2xl shadow-primary/20 backdrop-blur-xl"
-        >
+                {/* Mandala Spinning Circles */}
+                <div className="absolute inset-0 flex items-center justify-center scale-[2.5]">
+                    {[...Array(3)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+                            transition={{
+                                duration: 10 + i * 5,
+                                repeat: Infinity,
+                                ease: "linear",
+                            }}
+                            className="absolute inset-0"
+                        >
+                            <svg viewBox="0 0 100 100" className="w-full h-full opacity-20 overflow-visible">
+                                <circle
+                                    cx="50"
+                                    cy="50"
+                                    r={30 + i * 8}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="0.5"
+                                    strokeDasharray="1, 4"
+                                    className="text-primary"
+                                />
+                                {[...Array(12)].map((_, j) => (
+                                    <circle
+                                        key={j}
+                                        cx={50 + (30 + i * 8) * Math.cos((j * 30 * Math.PI) / 180)}
+                                        cy={50 + (30 + i * 8) * Math.sin((j * 30 * Math.PI) / 180)}
+                                        r="1.5"
+                                        className="fill-primary"
+                                    />
+                                ))}
+                            </svg>
+                        </motion.div>
+                    ))}
+                </div>
+
+                <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 border-2 border-primary/20 shadow-2xl shadow-primary/20 backdrop-blur-xl"
+                >
                     <img src="/Favicon.png" alt="Logo" className="h-16 w-16" />
 
                     <motion.div
