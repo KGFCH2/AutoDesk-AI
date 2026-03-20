@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, ChevronRight, Database, Key, Zap, Bot, Mail, Github, Linkedin, ChevronDown, CheckCircle, ZapIcon, ArrowRightIcon, BotIcon, LayoutDashboard, FileText, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button.variants";
 import { Layout } from "@/components/Layout";
 import { SlideshowBackground } from "@/components/slideshow-background";
 import { cn } from "@/lib/utils";
@@ -115,12 +116,12 @@ const APIStep = ({ step, title, description, icon: Icon }: { step: number, title
 );
 
 const NotionAppMockup = () => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{ 
-      scale: 1.05, 
-      rotateX: -5, 
+    whileHover={{
+      scale: 1.05,
+      rotateX: -5,
       rotateY: 8,
       boxShadow: "0 20px 80px rgba(34,197,94,0.3), 0 0 40px rgba(34,197,94,0.1)"
     }}
