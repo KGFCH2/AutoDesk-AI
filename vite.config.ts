@@ -21,10 +21,10 @@ export default defineConfig(() => ({
           });
         }
       },
-      "/api-openai": {
-        target: "https://api.openai.com/v1",
+      "/api-groq": {
+        target: "https://api.groq.com/openai/v1",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-openai/, ""),
+        rewrite: (path) => path.replace(/^\/api-groq/, ""),
       },
     },
   },
