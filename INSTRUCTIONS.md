@@ -18,21 +18,21 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 
 ### 📄 Pages overview
 
-| Route | What it shows |
-| ------- | --------------- |
-| `/` | Main dashboard — hero controls, pending tasks, activity log, execution results |
-| `/terms` | Terms of Service — legal usage rules with icons and hover effects |
+| `/` | Home | Landing page with storytelling, features overview, and product mission |
+| `/dashboard` | Mission Control | Core agent control panel (tasks, logs, execution results) |
+| `/features` | Features | Detailed breakdown of the agent's capabilities and tech stack |
+| `/docs` | Docs | Comprehensive setup guide and FAQ knowledge base |
+| `/terms` | Terms of Service | Legal usage rules with icons and hover effects |
 | `/privacy` | Privacy Policy — data handling and credential policies |
 | `/faq` | FAQ — 10 questions in an accordion with icons |
 
 ### 🔄 Main user flow
 
-1. 🖥️ Open the dashboard at `/`.
-2. 🔄 Click **Refresh Tasks** to pull pending work from your Notion database.
-3. 🤖 Click **Run Agent** to classify and execute each task using AI.
+1. 🖥️ Open the **Mission Control Dashboard** at `/dashboard`.
+2. 🔄 Click **Scan Notion DB** to pull pending work from your workspace.
+3. 🤖 Click **Force Engine Start** to classify and execute each mission using AI.
 4. 📊 Review the **Pending Tasks**, **Activity Log**, and **Execution Results** panels.
-5. 🧭 Use the top navbar to visit **Terms**, **Privacy**, or **FAQ** pages.
-6. 🔗 Click the **GitHub** link in the hero section to open the project repository.
+5. 🧭 Toggle the **History** view to see past mission logs within the portal.
 
 ### 📝 Notion setup
 
@@ -75,12 +75,7 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 | --- | --- |
 | `VITE_NOTION_API_KEY` | 🔑 Notion integration token (starts with `ntn_`) |
 | `VITE_NOTION_DATABASE_ID` | 🗄️ Database ID from Notion URL (32-char hex string) |
-| `VITE_OPENAI_API_KEY` | 🤖 OpenAI API key for AI processing |
-
-### ⚖️ Content/legal guidance
-
-- Terms and Privacy pages contain starter legal copy.
-- Before launching commercially, have legal text reviewed for your jurisdiction and company structure.
+| `VITE_GROQ_API_KEY` | 🤖 Groq API key for AI processing |
 
 ---
 
@@ -91,8 +86,7 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 | File | Function |
 | --- | --- |
 | `src/main.tsx` | React entry point — mounts the app |
-| `src/App.tsx` | Top-level provider setup and route registration (/, /terms, /privacy, /faq) |
-| `src/App.css` | Additional application-level CSS |
+| `src/App.tsx` | Top-level provider setup and route registration |
 | `src/index.css` | Global design tokens, theme variables, fonts, and utility styles |
 | `src/vite-env.d.ts` | TypeScript declarations for Vite runtime |
 | `src/lib/utils.ts` | Shared utility helpers (class name merging, etc.) |
@@ -101,87 +95,35 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 
 | File | Function |
 | --- | --- |
-| `src/pages/index.tsx` | Dashboard page — hero, tasks, logs, results |
-| `src/pages/terms.tsx` | Terms of Service page |
-| `src/pages/privacy.tsx` | Privacy Policy page |
-| `src/pages/faq.tsx` | FAQ page |
+| `src/pages/Index.tsx` | Home page — Cinematic storytelling and guide |
+| `src/pages/dashboard.tsx` | Mission Control — Dashboard with stats and results |
+| `src/pages/features.tsx` | Features deep-dive |
+| `src/pages/docs.tsx` | Technical documentation and guide |
 | `src/pages/not-found.tsx` | 404 fallback page |
 
 ### Hooks
 
 | File | Function |
 | --- | --- |
-| `src/hooks/useAgent.ts` | Client-side state and API calls for fetching tasks and running the agent |
-| `src/hooks/use-mobile.tsx` | Detects mobile viewport for responsive behavior |
-| `src/hooks/use-toast.ts` | Shared hook for toast notifications |
+| `src/hooks/useAgent.ts` | Orchestration layer managing state and multi-tier AI execution |
 
 ### Components
 
 | File | Function |
 | --- | --- |
-| `src/components/layout.tsx` | Shared layout with sticky navbar, page links, and footer |
-| `src/components/hero-section.tsx` | Hero area with product tagline, Run/Fetch controls, and GitHub link |
-| `src/components/task-list.tsx` | Displays pending Notion tasks |
-| `src/components/results-panel.tsx` | Shows execution outputs with status badges |
-| `src/components/activity-log.tsx` | Timestamped runtime log feed |
-| `src/components/legal-section.tsx` | Terms and Privacy content (supports variant prop for single or combined display) |
-| `src/components/faq-section.tsx` | FAQ accordion with 10 questions, icons, and hover interactions |
-| `src/components/nav-link.tsx` | React Router NavLink wrapper for consistent styling |
-| `src/components/ui/*` | shadcn/ui primitives (accordion, button, card, dialog, etc.) |
-
-### Backend
-
-| File | Function |
-| --- | --- |
-| `supabase/functions/notion-agent/index.ts` | Serverless function — fetches tasks from Notion, classifies with AI, executes, updates Notion |
-| `supabase/config.toml` | Backend function configuration |
-
-### Configuration & tooling
-
-| File | Function |
-| --- | --- |
-| `.env` | Public runtime variables (API URL, public key, project ID) |
-| `index.html` | Root HTML document for Vite |
-| `tailwind.config.ts` | Tailwind theme extension — colors, fonts, animations |
-| `vite.config.ts` | Vite build and alias configuration |
-| `vitest.config.ts` | Vitest test runner configuration |
-| `tsconfig.json` | Base TypeScript configuration |
-| `tsconfig.app.json` | TypeScript config for app source |
-| `tsconfig.node.json` | TypeScript config for Node/Vite tooling |
-| `postcss.config.js` | PostCSS configuration for Tailwind processing |
-| `eslint.config.js` | ESLint linting rules |
-| `components.json` | shadcn/ui component registry configuration |
-
-### Auto-generated (do not edit)
-
-| File | Function |
-| --- | --- |
-| `src/integrations/supabase/client.ts` | Auto-generated backend client |
-| `src/integrations/supabase/types.ts` | Auto-generated backend type definitions |
+| `src/components/Layout.tsx` | Shared navigation with robust redirection logic |
+| `src/components/task-list.tsx` | Visual task intelligence modal content |
+| `src/components/results-panel.tsx` | Streaming execution output feed |
+| `src/components/activity-log.tsx` | Real-time neural log terminal |
+| `src/components/ui/*` | Professional-grade interface primitives |
 
 ---
 
 ## 3. Maintenance Notes
 
-### Customize the GitHub link
-
-Edit the URL in `src/components/HeroSection.tsx`.
-
-### Change legal text
-
-Edit `src/components/LegalSection.tsx`.
-
-### Add more FAQs
-
-Edit `src/components/FAQSection.tsx`.
-
 ### Change dashboard behavior
 
-Edit `src/hooks/useAgent.ts` (client) and `supabase/functions/notion-agent/index.ts` (backend).
-
-### Change visual styling
-
-Edit `src/index.css` and `tailwind.config.ts`, then component files as needed.
+Edit `src/hooks/useAgent.ts` (logic) and `src/pages/dashboard.tsx` (view).
 
 ### Add new pages
 
@@ -193,14 +135,24 @@ Edit `src/index.css` and `tailwind.config.ts`, then component files as needed.
 
 ## 4. Commercial Readiness Checklist
 
-- [ ] Replace the placeholder GitHub URL with your real repository
-- [ ] Review Terms of Service and Privacy Policy with legal counsel
-- [ ] Verify Notion database fields and status values match the agent
-- [ ] Confirm all secrets are configured securely
-- [ ] Test the full Refresh → Run → Results flow end to end
-- [ ] Test navigation between all pages on mobile
+- [x] Verify Notion database fields and status values match the agent
+- [x] Confirm all secrets are configured securely
+- [x] Test the full Scan → Launch → Result cycle end-to-end
+- [x] Test navigation between all pages on mobile viewports
+
+---
 
 ## 📖 Related Documentation
 
 - [README.md](README.md) - Project overview and quick start guide
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Technical architecture overview
 - [LICENSE](LICENSE) - MIT License terms
+
+---
+
+## 🔗 Connect & Explore
+
+**Developed with precision by [Babin Bid](https://github.com/KGFCH2)**  
+*Neural Integration | Autonomous Systems | Motion UI*
+
+[GitHub](https://github.com/KGFCH2) | [LinkedIn](https://linkedin.com/in/babinbid123) | [Email](mailto:babinbid05@gmail.com)
