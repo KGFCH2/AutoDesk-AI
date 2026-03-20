@@ -1,10 +1,13 @@
-import { ArrowUpRight, Github, Loader2, RefreshCw, Zap } from "lucide-react";
+import { ArrowUpRight, Github, Loader2, RefreshCw, Zap, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface HeroSectionProps {
   onRun: () => void;
   onFetch: () => void;
+  showHistory: boolean;
+  onToggleHistory: () => void;
   isRunning: boolean;
   isFetching: boolean;
   taskCount: number;
@@ -12,7 +15,7 @@ interface HeroSectionProps {
 
 const REPOSITORY_URL = "https://github.com/KGFCH2/AutoDesk-AI";
 
-export function HeroSection({ onRun, onFetch, isRunning, isFetching, taskCount }: HeroSectionProps) {
+export function HeroSection({ onRun, onFetch, showHistory, onToggleHistory, isRunning, isFetching, taskCount }: HeroSectionProps) {
   return (
     <motion.section
       initial={{ opacity: 0, scale: 0.95 }}
@@ -32,7 +35,7 @@ export function HeroSection({ onRun, onFetch, isRunning, isFetching, taskCount }
               >
                 <img src="/Favicon.png" alt="AutoDesk AI Logo" className="h-10 w-10" />
               </motion.div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-math-gradient">AutoDesk AI</h1>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-normal text-math-gradient pr-2">AutoDesk AI</h1>
             </div>
             <p className="max-w-2xl text-lg md:text-xl font-medium text-comic-gradient leading-relaxed">
               Notion-powered AI agent that reads your tasks, understands them, executes actions, and updates results — automatically.
@@ -87,13 +90,28 @@ export function HeroSection({ onRun, onFetch, isRunning, isFetching, taskCount }
               Refresh
             </Button>
           </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+            <Button 
+              onClick={onToggleHistory} 
+              variant={showHistory ? "secondary" : "ghost"} 
+              size="lg" 
+              className={cn(
+                "group font-bold text-base px-8 py-6 rounded-2xl w-full sm:w-auto border-2 transition-all",
+                showHistory ? "border-primary/50 text-primary shadow-[0_0_20px_rgba(34,197,94,0.1)]" : "border-transparent"
+              )}
+            >
+              <FileText className="mr-2 h-5 w-5" />
+              {showHistory ? "All Tasks" : "Pending Only"}
+            </Button>
+          </motion.div>
           {taskCount > 0 && (
             <motion.span
+              key={showHistory ? "history" : "pending"}
               initial={{ scale: 0, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               className="rounded-full bg-primary/20 border border-primary/30 px-4 py-2 text-sm font-black text-primary shadow-lg"
             >
-              {taskCount} pending tasks
+              {taskCount} {showHistory ? "total tasks" : "pending tasks"}
             </motion.span>
           )}
         </div>
