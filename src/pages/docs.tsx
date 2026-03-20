@@ -28,7 +28,7 @@ export default function DocsPage() {
               </div>
             </AccordionTrigger>
             <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pl-14">
-              Go to the <a href="https://www.notion.so/my-integrations" target="_blank" rel="noreferrer" className="text-primary hover:underline transition-all">Notion Integrations</a> page, create a new integration, and copy your Internal Integration Token.
+              Go to the <a href="https://www.notion.so/my-integrations" target="_blank" rel="noreferrer noopener" className="text-primary hover:underline transition-all">Notion Integrations</a> page, create a new integration, and copy your Internal Integration Token.
             </AccordionContent>
           </AccordionItem>
           
