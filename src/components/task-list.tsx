@@ -1,77 +1,88 @@
-import { CheckCircle, Clock, AlertCircle, FileText } from "lucide-react";
+import { CheckCircle, Clock, AlertCircle, FileText, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface NotionTask {
   id: string;
   title: string;
   status: string;
+  lastEditedTime: string;
 }
 
 interface TaskListProps {
   tasks: NotionTask[];
+  title?: string;
 }
 
-export function TaskList({ tasks }: TaskListProps) {
+export function TaskList({ tasks, title = "Task Overview" }: TaskListProps) {
   if (tasks.length === 0) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl border border-border bg-card p-6 scroll-reveal md:p-8"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="rounded-[2.5rem] border border-white/5 bg-black/40 p-12 backdrop-blur-xl"
       >
-        <h2 className="text-2xl font-bold mb-6 flex items-center justify-center gap-3 text-math-gradient md:text-3xl">
-          <FileText className="h-8 w-8 text-muted-foreground" />
-          Pending Tasks
-        </h2>
-        <div className="flex flex-col items-center py-12 px-6 rounded-3xl bg-background/50 border-2 border-dashed border-white/5 shadow-inner">
-          <p className="text-muted-foreground text-lg text-center font-bold italic opacity-60">
-            No pending tasks found.
-          </p>
-          <p className="text-muted-foreground/40 text-sm text-center mt-2 italic font-mono">
-            Click "Refresh" to check your Notion database.
-          </p>
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+            <FileText className="h-10 w-10 text-primary" />
+          </div>
+          <div className="text-center space-y-2">
+            <h3 className="text-2xl font-black text-foreground">No Tasks Identified</h3>
+            <p className="text-muted-foreground font-medium max-w-xs">
+              Connect your Notion database to see your autonomous workflow in action.
+            </p>
+          </div>
         </div>
       </motion.div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-border bg-card p-6 scroll-reveal bg-playful-1 md:p-8"
-    >
-      <h2 className="text-2xl font-black mb-8 flex flex-col items-center gap-4 text-math-gradient md:flex-row md:justify-between md:text-3xl">
-        <div className="flex items-center gap-3">
-          <FileText className="h-8 w-8 text-primary group-hover:animate-bounce" />
-          Pending Tasks
-        </div>
-        <span className="rounded-2xl bg-primary/15 border border-primary/20 px-6 py-2 text-sm font-black text-primary backdrop-blur-md shadow-lg shadow-primary/10">
-          {tasks.length} task{tasks.length !== 1 ? "s" : ""}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between px-2">
+        <h2 className="text-2xl font-black text-foreground flex items-center gap-3">
+          <FileText className="h-6 w-6 text-primary" />
+          {title}
+        </h2>
+        <span className="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-black text-primary uppercase tracking-widest">
+          {tasks.length} Entr{tasks.length === 1 ? "y" : "ies"}
         </span>
-      </h2>
-      <div className="space-y-6">
+      </div>
+      
+      <div className="grid gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
         {tasks.map((task, index) => (
           <motion.div
             key={task.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-            whileHover={{ scale: 1.03, x: 5 }}
-            className="flex flex-col items-center gap-4 rounded-3xl border-2 border-dashed border-primary/20 bg-background/90 p-5 shadow-xl md:flex-row md:p-6"
+            transition={{ delay: index * 0.05 }}
+            className="group p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] hover:border-primary/20 transition-all duration-300"
           >
-            <div className="p-3 rounded-2xl bg-warning/10 border border-warning/10 shadow-inner">
-              <Clock className="h-6 w-6 text-warning shrink-0" />
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-3 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className={cn(
+                    "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
+                    task.status === "Done" ? "bg-primary/10 text-primary" : "bg-warning/10 text-warning"
+                  )}>
+                    {task.status}
+                  </span>
+                  <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-medium">
+                    <Calendar className="w-3 h-3" />
+                    {new Date(task.lastEditedTime).toLocaleDateString()} at {new Date(task.lastEditedTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                </div>
+                <h3 className="text-xl font-black text-foreground leading-tight group-hover:text-primary transition-colors">
+                  {task.title}
+                </h3>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all">
+                {task.status === "Done" ? <CheckCircle className="w-6 h-6 text-primary" /> : <Clock className="w-6 h-6 text-warning" />}
+              </div>
             </div>
-            <span className="text-xl font-black text-center text-foreground/90 md:text-left leading-tight lg:text-2xl">
-              {task.title}
-            </span>
-            <span className="md:ml-auto rounded-xl bg-warning/10 px-5 py-2 text-xs font-black text-warning border border-warning/20 shadow-lg tracking-widest uppercase">
-              {task.status}
-            </span>
           </motion.div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
