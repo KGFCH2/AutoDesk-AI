@@ -76,12 +76,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </motion.div>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 text-muted-foreground"
+            className="md:hidden p-2 text-muted-foreground group transition-colors focus:outline-none"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? <X className="h-6 w-6 group-hover:text-red-500 transition-all duration-300" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
