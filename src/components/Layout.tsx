@@ -36,12 +36,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex items-center space-x-2 group hover:opacity-80 transition-opacity"
+            className="flex items-center space-x-2 group hover:opacity-80 transition-opacity shrink-0"
           >
             <div className="p-1 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-all duration-300">
-              <img src="/Favicon.png" alt="AutoDesk AI Logo" className="h-7 w-7" />
+              <img src="/Favicon.png" alt="AutoDesk AI Logo" className="h-6 w-6 md:h-7 md:w-7" />
             </div>
-            <span className="font-bold text-lg tracking-normal pr-2">AutoDesk AI</span>
+            <span className="font-bold text-base md:text-lg tracking-normal pr-2">AutoDesk AI</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -140,31 +140,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex flex-col items-center space-y-3 group"
+            className="flex flex-col items-center space-y-3 group w-full"
           >
             <div className="p-2 rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-all duration-300 transform group-hover:rotate-12">
-              <img src="/Favicon.png" alt="AutoDesk AI" className="h-8 w-8" />
+              <img src="/Favicon.png" alt="AutoDesk AI" className="h-6 w-6 md:h-8 md:w-8" />
             </div>
-            <span className="font-bold text-2xl tracking-normal text-math-gradient px-4 pr-6">AutoDesk AI</span>
+            <span className="font-bold text-xl md:text-2xl tracking-normal text-math-gradient px-4">AutoDesk AI</span>
           </Link>
 
-          <nav className="flex flex-wrap flex-col sm:flex-row items-center justify-center gap-6 md:gap-12 text-sm font-bold uppercase tracking-widest">
+          <nav className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-12 text-[10px] md:text-sm font-bold uppercase tracking-widest">
             {navItems.map((link) => (
               <Link key={link.to} to={link.to} className="text-muted-foreground hover:text-white transition-all hover:scale-110 flex items-center gap-2">
-                <link.icon className="w-4 h-4 text-primary" />
+                <link.icon className="w-3 h-3 md:w-4 md:h-4 text-primary" />
                 {link.label}
               </Link>
             ))}
             <Link to="/terms" className="text-muted-foreground hover:text-white transition-all hover:scale-110 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
+              <Shield className="w-3 h-3 md:w-4 md:h-4 text-primary" />
               Terms
             </Link>
             <Link to="/privacy" className="text-muted-foreground hover:text-white transition-all hover:scale-110 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
+              <Shield className="w-3 h-3 md:w-4 md:h-4 text-primary" />
               Privacy
             </Link>
             <Link to="/faq" className="text-muted-foreground hover:text-white transition-all hover:scale-110 flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-primary" />
+              <HelpCircle className="w-3 h-3 md:w-4 md:h-4 text-primary" />
               FAQ
             </Link>
           </nav>
