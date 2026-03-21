@@ -164,8 +164,8 @@ const Index = () => {
                     </h2>
                     <p className="text-muted-foreground font-medium">Analyze and manage your autonomous engine's workload.</p>
                   </div>
-                  <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={() => setIsModalOpen(false)}>
-                    <X className="w-6 h-6" />
+                  <Button variant="ghost" size="icon" className="group rounded-full hover:bg-red-500/10 transition-colors" onClick={() => setIsModalOpen(false)}>
+                    <X className="w-6 h-6 group-hover:text-red-500 transition-colors" />
                   </Button>
                 </div>
 
