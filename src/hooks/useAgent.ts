@@ -31,14 +31,13 @@ interface NotionStatusProperty {
   status: { name: string };
 }
 
-const NOTION_API = window.location.hostname === 'localhost' ? "/api-notion" : "https://api.notion.com/v1";
-const GROQ_API = window.location.hostname === 'localhost' ? "/api-groq" : "https://api.groq.com/openai/v1";
+const NOTION_API = "/api/notion";
+const GROQ_API = "/api/groq";
 const NOTION_VERSION = "2022-06-28";
 
 // Fetch tasks from Notion
-async function fetchTasks(apiKey: string, dbId: string, showHistory: boolean = false): Promise<NotionTask[]> {
-  const url = `${NOTION_API}/databases/${dbId}/query`;
-  console.log('Fetching tasks from:', url, 'History:', showHistory);
+async function fetchTasks(dbId: string, showHistory: boolean = false): Promise<NotionTask[]> {
+  const url = NOTION_API;
 
   const body: { filter?: { property: string; status: { equals: string } } } = {};
   if (!showHistory) {
@@ -51,11 +50,13 @@ async function fetchTasks(apiKey: string, dbId: string, showHistory: boolean = f
   const res = await fetch(url, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      path: `databases/${dbId}/query`,
+      method: "POST",
+      body: body,
+    }),
   });
 
   if (!res.ok) {
@@ -87,27 +88,28 @@ async function classifyTask(
   const model = "llama-3.1-8b-instant";
 
   const res = await fetch(
-    `${GROQ_API}/chat/completions`,
+    GROQ_API,
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${groqKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: model,
-        messages: [
-          {
-            role: "system",
-            content: `You are a task classifier. Given a task description, classify it and return a JSON with:
+        body: {
+          model: model,
+          messages: [
+            {
+              role: "system",
+              content: `You are a task classifier. Given a task description, classify it and return a JSON with:
 - "action": one of "generate_content", "search_web", "summarize", "analyze"
 - "details": a brief plan of what to do
 
 Return ONLY valid JSON, no markdown.`,
-          },
-          { role: "user", content: task },
-        ],
-        temperature: 0,
+            },
+            { role: "user", content: task },
+          ],
+          temperature: 0,
+        }
       }),
     }
   );
@@ -145,25 +147,26 @@ async function executeTask(
   };
 
   const res = await fetch(
-    `${GROQ_API}/chat/completions`,
+    GROQ_API,
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${groqKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: model,
-        messages: [
-          {
-            role: "system",
-            content: systemPrompts[action] || systemPrompts.generate_content,
-          },
-          {
-            role: "user",
-            content: `Task: ${task}\nPlan: ${details}\n\nExecute this task and provide the result.`,
-          },
-        ],
+        body: {
+          model: model,
+          messages: [
+            {
+              role: "system",
+              content: systemPrompts[action] || systemPrompts.generate_content,
+            },
+            {
+              role: "user",
+              content: `Task: ${task}\nPlan: ${details}\n\nExecute this task and provide the result.`,
+            },
+          ],
+        }
       }),
     }
   );
@@ -180,36 +183,38 @@ async function executeTask(
 
 // Update Notion task
 async function updateNotionTask(
-  apiKey: string,
   pageId: string,
   output: string
 ) {
   // Update status to Done
-  await fetch(`${NOTION_API}/pages/${pageId}`, {
-    method: "PATCH",
+  await fetch(NOTION_API, {
+    method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      properties: {
-        Status: { status: { name: "Done" } },
-      },
+      path: `pages/${pageId}`,
+      method: "PATCH",
+      body: {
+        properties: {
+          Status: { status: { name: "Done" } },
+        },
+      }
     }),
   });
 
   // Add output as a comment/block
   const truncated = output.length > 2000 ? output.slice(0, 1997) + "..." : output;
-  await fetch(`${NOTION_API}/blocks/${pageId}/children`, {
-    method: "PATCH",
+  await fetch(NOTION_API, {
+    method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      children: [
+      path: `blocks/${pageId}/children`,
+      method: "PATCH",
+      body: {
+        children: [
         {
           object: "block",
           type: "callout",
@@ -224,6 +229,7 @@ async function updateNotionTask(
           },
         },
       ],
+    }
     }),
   });
 }
@@ -245,12 +251,7 @@ export function useAgent() {
     setIsFetching(true);
     addLog(showHistory ? "Fetching all tasks (history included)..." : "Fetching pending tasks from Notion...");
     try {
-      const apiKey = import.meta.env.VITE_NOTION_API_KEY;
-      const dbId = import.meta.env.VITE_NOTION_DATABASE_ID;
-      if (!apiKey || !dbId) {
-        throw new Error("Notion API configuration missing");
-      }
-      const tasks = await fetchTasks(apiKey, dbId, showHistory);
+      const tasks = await fetchTasks("DATABASE_ID_PLACEHOLDER", showHistory);
       setTasks(tasks);
       addLog(`Found ${tasks.length} tasks`);
       toast.success(`Found ${tasks.length} tasks`);
@@ -269,15 +270,7 @@ export function useAgent() {
     addLog("🚀 Starting Groq-powered agent...");
     toast.info("Agent is preparing to run...");
     try {
-      const apiKey = import.meta.env.VITE_NOTION_API_KEY;
-      const dbId = import.meta.env.VITE_NOTION_DATABASE_ID;
-      const groqKey = import.meta.env.VITE_GROQ_API_KEY;
-
-      if (!apiKey || !dbId || !groqKey) {
-        throw new Error("Configuration missing: Notion API and Groq API keys are required");
-      }
-
-      const tasks = await fetchTasks(apiKey, dbId);
+      const tasks = await fetchTasks("DATABASE_ID_PLACEHOLDER");
 
       if (tasks.length === 0) {
         addLog("No pending tasks found.");
@@ -293,20 +286,19 @@ export function useAgent() {
           addLog(`Processing: ${task.title}`);
 
           // Step 1: Classify
-          const classification = await classifyTask(task.title, groqKey);
+          const classification = await classifyTask(task.title);
           addLog(`Classified as: ${classification.action}`);
 
           // Step 2: Execute
           const output = await executeTask(
             task.title,
             classification.action,
-            classification.details,
-            groqKey
+            classification.details
           );
           addLog(`Executed: ${task.title}`);
 
           // Step 3: Update Notion
-          await updateNotionTask(apiKey, task.id, output);
+          await updateNotionTask(task.id, output);
           addLog(`Updated Notion: ${task.title}`);
 
           results.push({
