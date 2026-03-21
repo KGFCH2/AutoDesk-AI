@@ -5,9 +5,15 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { path: queryPath } = req.query; // For direct sub-path calls
-  const { path: bodyPath, method, body } = req.body;
-  const path = queryPath || bodyPath; // Support both pathing styles
+  const { path: queryPath } = req.query;
+  const { path: bodyPath, method: bodyMethod, body: bodyContent } = req.body;
+  const path = queryPath || bodyPath;
+  
+  // Use X-HTTP-Method-Override header or fall back to body property
+  const method = (req.headers['x-http-method-override'] as string) || bodyMethod || 'POST';
+  
+  // If we have an override header, the entire body is the Notion content
+  const notionBody = req.headers['x-http-method-override'] ? req.body : bodyContent;
   
   const NOTION_KEY = process.env.NOTION_API_KEY;
   const DATABASE_ID = process.env.NOTION_DATABASE_ID;
@@ -22,15 +28,17 @@ export default async function handler(req: any, res: any) {
       ? path.replace('DATABASE_ID_PLACEHOLDER', DATABASE_ID)
       : path;
 
-    const url = `https://api.notion.com/v1/${finalPath}`;
+    // Remove any redundant leading slashes to prevent triple-slash issues
+    const cleanedPath = finalPath.replace(/^\//, '');
+    const url = `https://api.notion.com/v1/${cleanedPath}`;
     const response = await fetch(url, {
-      method: method || 'GET',
+      method: method,
       headers: {
         'Authorization': `Bearer ${NOTION_KEY}`,
-        'Notion-Version': NOTION_VERSION,
         'Content-Type': 'application/json',
+        'Notion-Version': NOTION_VERSION,
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body: method !== 'GET' ? JSON.stringify(notionBody) : undefined,
     });
 
     const data = await response.json();
