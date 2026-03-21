@@ -26,10 +26,11 @@ Users create tasks in Notion → AutoDesk scans and classifies them → AI agent
 
 ## 🌟 Modern Features
 
-- 🎨 **Asymmetric Hero Design**: A cinematic, ultra-wide landing page with 3D product mocks.
-- 🏛️ **Mission Control Dashboard**: Glassmorphic UI with analytics (Engine Status, Success Rate).
+- 🎨 **Asymmetric Hero Design**: A cinematic, ultra-wide landing page with 3D product mocks and glassmorphic elements.
+- 🏛️ **Mission Control Dashboard**: Glassmorphic UI with analytics (Engine Status, Success Rate) and real-time activity tracking.
 - 📜 **Task Intelligence Modal**: A full-screen portal for managing active queues and historical timelines.
-- 📱 **Mobile First**: Fully responsive layout with touch-optimized controls.
+- 📱 **Ultra-Mobile Responsive**: Precision-engineered layout that looks perfect on everything from 320px mobile screens to 4K monitors.
+- 🔒 **High-Security Architecture**: Zero-key frontend with a backend proxy (Vercel Functions) to keep your API credentials 100% private.
 
 ## 📋 Pages
 
@@ -53,32 +54,35 @@ Users create tasks in Notion → AutoDesk scans and classifies them → AI agent
 ## 📁 Project structure
 
 ```bash
-src/
+├── api/
+│   ├── notion.ts           – Secure Notion proxy (hides API Key and DB ID)
+│   └── groq.ts             – Secure Groq proxy (hides API Key)
+├── src/
 ├── pages/
 │   ├── Index.tsx             – Homepage (Cinematic Hero + Storytelling)
 │   ├── dashboard.tsx         – Mission Control (Stats, Engine, Activity)
 │   ├── features.tsx          – Feature deep-dive
 │   └── docs.tsx              – Technical guides
 ├── components/
-│   ├── layout.tsx            – Navigation with robust redirection logic
+│   ├── Layout.tsx            – Navigation with robust mobile-first drawer system
 │   ├── hero-section.tsx       – Dashboard's Command Center UI
 │   ├── task-list.tsx          – Task Intelligence modal content
 │   ├── results-panel.tsx      – Execution result feeds
 │   └── activity-log.tsx       – Real-time neural log streaming
 ├── hooks/
-│   └── useAgent.ts           – Orchestration hook (Notion/AI logic)
+│   └── useAgent.ts           – Orchestration hook (Zero-key logic)
 └── lib/utils.ts              – Tailwind utility merging
 ```
 
 ## 🔧 Installation & Environment
 
-Configure these in your `.env` file:
+Configure these in your `.env` file (No `VITE_` prefix required for keys):
 
 |Variable|Purpose|
 |---|---|
-|`VITE_NOTION_API_KEY`|🔑 Notion integration token|
-|`VITE_NOTION_DATABASE_ID`|🗄️ Notion database ID|
-|`VITE_GROQ_API_KEY`|🤖 Groq API key for LPU™ inference|
+|`NOTION_API_KEY`|🔑 Internal Notion integration token|
+|`NOTION_DATABASE_ID`|🗄️ Secure Notion database ID|
+|`GROQ_API_KEY`|🤖 Groq API key for LPU™ inference|
 
 ---
 
