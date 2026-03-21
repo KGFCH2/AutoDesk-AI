@@ -7,12 +7,12 @@ export default function DocsPage() {
     <Layout>
       <div className="container py-16 px-6 max-w-4xl mx-auto space-y-12">
         <div className="space-y-4 text-center">
-           <h1 className="text-5xl md:text-7xl font-black tracking-normal text-foreground flex items-center gap-6 justify-center">
+           <h1 className="text-3xl md:text-7xl font-black tracking-normal text-foreground flex items-center gap-6 justify-center">
               <FileText className="h-8 w-8 text-primary hidden md:block animate-pulse" />
               <span className="text-math-gradient italic pr-2">Knowledge Base</span>
               <FileText className="h-8 w-8 text-primary hidden md:block animate-pulse" />
            </h1>
-           <p className="text-xl text-muted-foreground font-comic leading-relaxed max-w-2xl mx-auto">
+           <p className="text-base md:text-xl text-muted-foreground font-comic leading-relaxed max-w-2xl mx-auto px-4">
              Explore our documentation to get the most out of AutoDesk AI. From setup to advanced execution.
            </p>
         </div>
@@ -27,7 +27,7 @@ export default function DocsPage() {
                 How do I get my Notion API Key?
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pl-14">
+            <AccordionContent className="text-muted-foreground text-sm md:text-base leading-relaxed pb-6 pl-6 md:pl-14">
               Go to the <a href="https://www.notion.so/my-integrations" target="_blank" rel="noreferrer noopener" className="text-primary hover:underline transition-all">Notion Integrations</a> page, create a new integration, and copy your Internal Integration Token.
             </AccordionContent>
           </AccordionItem>
@@ -41,7 +41,7 @@ export default function DocsPage() {
                 Which Database ID do I use?
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pl-14">
+            <AccordionContent className="text-muted-foreground text-sm md:text-base leading-relaxed pb-6 pl-6 md:pl-14">
               Open your Notion database in the browser. The ID is the 32-character string in the URL after your workspace name and the slash, but before the question mark.
             </AccordionContent>
           </AccordionItem>
@@ -55,7 +55,7 @@ export default function DocsPage() {
                 How does the auto-execution work?
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pl-14">
+            <AccordionContent className="text-muted-foreground text-sm md:text-base leading-relaxed pb-6 pl-6 md:pl-14">
               The agent polls for tasks with the 'To Do' status. It then classifies the task using Groq Llama, executes it using Groq Llama 3.3, and writes the results back to Notion before marking it 'Done'.
             </AccordionContent>
           </AccordionItem>
@@ -69,7 +69,7 @@ export default function DocsPage() {
                 Can I use other models?
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pl-14">
+            <AccordionContent className="text-muted-foreground text-sm md:text-base leading-relaxed pb-6 pl-6 md:pl-14">
               Currently we support Groq's high-speed Llama and Mixtral (Llama 3.3 replacement) models for maximum performance.
             </AccordionContent>
           </AccordionItem>
