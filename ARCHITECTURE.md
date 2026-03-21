@@ -7,16 +7,18 @@ This document describes the high-level architecture of the AutoDesk AI execution
 ```mermaid
 graph TD
     User((User)) -->|Creates Task| Notion[Notion Database]
-    Sub[Mission Control Dashboard] -->|Fetch Tasks| Notion
-    History{History Toggle} -->|Filter| Sub
-    Sub -->|Classify Task| GroqFast[Groq Llama-3.1-8b]
-    GroqFast -->|Classification Result| Router{Action Router}
+    Sub[Mission Control Dashboard] -->|Agent Request| Proxy[Secure API Proxy /api/*]
+    Proxy -->|Fetch Tasks| Notion
     
-    Router -->|Execution| GroqPower[Groq Llama-3.3-70b-versatile]
-    GroqPower -->|Generated Result| Notion
-    GroqPower -->|Update Logs| Sub
+    Proxy -->|Classify| GroqFast[Groq Llama-3.1-8b]
+    GroqFast -->|Result| Router{Action Router}
     
-    Notion -.->|Poll| Sub
+    Router -->|Execution| Proxy
+    Proxy -->|Power| GroqPower[Groq Llama-3.3-70b]
+    GroqPower -->|Generated Result| Proxy
+    Proxy -->|Push Data| Notion
+    
+    Proxy -->|Update Logs| Sub
     Sub -->|Open| Modal[Task Intelligence Modal]
 ```
 
@@ -24,13 +26,18 @@ graph TD
 
 ### 1. Frontend (React + Vite)
 
-- **`Layout.tsx`**: Shared navigation with robust redirection logic and responsive wrapper.
-- **`Index.tsx`**: Modern Landing Page with ultra-wide cinematic hero and 3D product previews.
-- **`Dashboard.tsx`**: The "Mission Control" hub featuring real-time stats (Success Rate, Engine Status) and streaming activity logs.
+- **`Layout.tsx`**: Shared navigation with a mobile-optimized drawer system and robust routing protection.
+- **`Index.tsx`**: High-performance Landing Page featuring ultra-responsive typography and 3D mock rotations synchronized across all viewports.
+- **`Dashboard.tsx`**: The "Mission Control" hub with dynamic stats and real-time activity logs.
 - **`TaskIntelligenceModal`**: A specialized portal for deep-diving into pending and historical task data.
-- **`useAgent.ts`**: Orchestration layer managing state persistence and multi-tier AI inference.
+- **`useAgent.ts`**: Zero-key orchestration layer that securely communicates with the backend proxy.
 
-### 2. AI Intelligence (Groq API)
+### 2. Backend Proxy (Vercel Functions)
+
+- **`api/notion.ts`**: Securely handles all Notion interactions. Bakes in the `NOTION_API_KEY` and `DATABASE_ID` on the server so they never reach the client.
+- **`api/groq.ts`**: Proxies requests to Groq, injecting the `GROQ_API_KEY` server-side to prevent key leakage.
+
+### 3. AI Intelligence (Groq API)
 
 - **Classification Layer**: Uses `llama-3.1-8b-instant` for sub-second task parsing and JSON schema generation.
 - **Production Layer**: Uses `llama-3.3-70b-versatile` for high-context reasoning and professional content generation.
