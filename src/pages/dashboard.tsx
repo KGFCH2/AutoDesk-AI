@@ -36,18 +36,18 @@ const Index = () => {
       <div className="container py-12 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         
         {/* Command Center Hero */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-black/40 border border-white/5 rounded-[3rem] p-6 md:p-12 backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-black/40 border border-white/5 rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
           <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 max-w-2xl">
             <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-black tracking-widest uppercase text-primary">
               <Cpu className="w-3 h-3 animate-pulse" />
               <span>Neural Engine 01 - Online</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight leading-none">
+            <h1 className="text-3xl md:text-5xl font-black text-foreground tracking-tight leading-none">
               Mission <br />
               <span className="text-math-gradient">Control Center</span>
             </h1>
-            <p className="text-lg text-muted-foreground font-medium leading-relaxed font-comic">
+            <p className="text-base md:text-lg text-muted-foreground font-medium leading-relaxed font-comic">
               Orchestrate your autonomous agents, monitor real-time execution, and analyze production intelligence from one unified interface.
             </p>
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
@@ -155,7 +155,7 @@ const Index = () => {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-5xl h-[80vh] overflow-hidden rounded-[3rem] border border-white/10 bg-black/60 shadow-[0_0_100px_rgba(34,197,94,0.15)] flex flex-col"
+                className="relative w-full max-w-5xl h-[80vh] overflow-hidden rounded-[1.5rem] md:rounded-[3rem] border border-white/10 bg-black/60 shadow-[0_0_100px_rgba(34,197,94,0.15)] flex flex-col"
               >
                 <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
                   <div className="space-y-1">
