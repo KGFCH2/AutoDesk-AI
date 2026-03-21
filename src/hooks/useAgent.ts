@@ -47,13 +47,12 @@ async function fetchTasks(dbId: string, showHistory: boolean = false): Promise<N
     };
   }
 
-  const res = await fetch(url, {
+  const res = await fetch(`${NOTION_API}/databases/${dbId}/query`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      path: `databases/${dbId}/query`,
       method: "POST",
       body: body,
     }),
@@ -88,7 +87,7 @@ async function classifyTask(
   const model = "llama-3.1-8b-instant";
 
   const res = await fetch(
-    GROQ_API,
+    `${GROQ_API}/chat/completions`,
     {
       method: "POST",
       headers: {
@@ -96,7 +95,7 @@ async function classifyTask(
       },
       body: JSON.stringify({
         body: {
-          model: model,
+          model: "llama-3.1-8b-instant",
           messages: [
             {
               role: "system",
@@ -106,7 +105,7 @@ async function classifyTask(
 
 Return ONLY valid JSON, no markdown.`,
             },
-            { role: "user", content: task },
+            { role: "user", content: `Classify this task: ${task}` },
           ],
           temperature: 0,
         }
@@ -146,30 +145,27 @@ async function executeTask(
     analyze: `You are an analyst. Provide a thorough analysis with key insights, data points, and recommendations.`,
   };
 
-  const res = await fetch(
-    GROQ_API,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        body: {
-          model: model,
-          messages: [
-            {
-              role: "system",
-              content: systemPrompts[action] || systemPrompts.generate_content,
-            },
-            {
-              role: "user",
-              content: `Task: ${task}\nPlan: ${details}\n\nExecute this task and provide the result.`,
-            },
-          ],
-        }
-      }),
-    }
-  );
+  const res = await fetch(`${GROQ_API}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      body: {
+        model: model,
+        messages: [
+          {
+            role: "system",
+            content: systemPrompts[action] || systemPrompts.generate_content,
+          },
+          {
+            role: "user",
+            content: `Task: ${task}\nPlan: ${details}\n\nExecute this task and provide the result.`,
+          },
+        ],
+      }
+    }),
+  });
 
   if (!res.ok) {
     if (res.status === 429) throw new Error("Groq Rate limited. Try again later.");
@@ -187,13 +183,12 @@ async function updateNotionTask(
   output: string
 ) {
   // Update status to Done
-  await fetch(NOTION_API, {
+  await fetch(`${NOTION_API}/pages/${pageId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      path: `pages/${pageId}`,
       method: "PATCH",
       body: {
         properties: {
@@ -205,13 +200,12 @@ async function updateNotionTask(
 
   // Add output as a comment/block
   const truncated = output.length > 2000 ? output.slice(0, 1997) + "..." : output;
-  await fetch(NOTION_API, {
+  await fetch(`${NOTION_API}/blocks/${pageId}/children`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      path: `blocks/${pageId}/children`,
       method: "PATCH",
       body: {
         children: [
