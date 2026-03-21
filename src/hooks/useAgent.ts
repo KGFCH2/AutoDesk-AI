@@ -215,26 +215,26 @@ async function updateNotionTask(
       method: "PATCH",
       body: {
         children: [
-        {
-          object: "block",
-          type: "callout",
-          callout: {
-            icon: { type: "emoji", emoji: "🤖" },
-            rich_text: [
-              {
-                type: "text",
-                text: { content: `AutoDesk AI Output (via Groq):\n${truncated}` },
-              },
-            ],
+          {
+            object: "block",
+            type: "callout",
+            callout: {
+              icon: { type: "emoji", emoji: "🤖" },
+              rich_text: [
+                {
+                  type: "text",
+                  text: { content: `AutoDesk AI Output (via Groq):\n${truncated}` },
+                },
+              ],
+            },
           },
-        },
-      ],
-    }
+        ],
+      }
     }),
   });
 }
 
-export function useAgent() {
+export function useAgent(groqKey: string = "") {
   const [showHistory, setShowHistory] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -286,14 +286,15 @@ export function useAgent() {
           addLog(`Processing: ${task.title}`);
 
           // Step 1: Classify
-          const classification = await classifyTask(task.title);
+          const classification = await classifyTask(task.title, groqKey);
           addLog(`Classified as: ${classification.action}`);
 
           // Step 2: Execute
           const output = await executeTask(
             task.title,
             classification.action,
-            classification.details
+            classification.details,
+            groqKey
           );
           addLog(`Executed: ${task.title}`);
 
@@ -337,7 +338,7 @@ export function useAgent() {
     } finally {
       setIsRunning(false);
     }
-  }, [addLog, fetchTasksFromNotion]);
+  }, [addLog, fetchTasksFromNotion, groqKey]);
 
   return { isRunning, isFetching, tasks, results, logs, showHistory, setShowHistory, fetchTasks: fetchTasksFromNotion, runAgent };
 }
