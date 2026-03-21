@@ -14,7 +14,10 @@ export default defineConfig(() => ({
       "/api/notion": {
         target: "https://api.notion.com/v1",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/notion/, ""),
+        rewrite: (path) => {
+          const newPath = path.replace(/^\/api\/notion/, "");
+          return newPath.replace('DATABASE_ID_PLACEHOLDER', process.env.NOTION_DATABASE_ID || "");
+        },
         headers: {
           'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
           'Notion-Version': '2022-06-28'
