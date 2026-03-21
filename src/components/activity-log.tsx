@@ -16,7 +16,7 @@ export function ActivityLog({ logs }: ActivityLogProps) {
         <Terminal className="h-4 w-4 text-muted-foreground" />
         Activity Log
       </h2>
-      <div className="bg-background rounded-lg p-3 max-h-48 overflow-y-auto font-mono text-xs space-y-1">
+      <div className="bg-background rounded-lg p-3 max-h-96 overflow-y-auto font-mono text-xs space-y-1">
         <AnimatePresence>
           {logs.length === 0 ? (
             <motion.p
