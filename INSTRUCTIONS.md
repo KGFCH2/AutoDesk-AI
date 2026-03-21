@@ -29,7 +29,7 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 ### 🔄 Main user flow
 
 1. 🖥️ Open the **Mission Control Dashboard** at `/dashboard`.
-2. 🔄 Click **Scan Notion DB** to pull pending work from your workspace.
+2. 🔄 Click **Scan Notion DB** to pull pending missions (The backend proxy securely hides your internal IDs from the console).
 3. 🤖 Click **Force Engine Start** to classify and execute each mission using AI.
 4. 📊 Review the **Pending Tasks**, **Activity Log**, and **Execution Results** panels.
 5. 🧭 Toggle the **History** view to see past mission logs within the portal.
@@ -42,7 +42,7 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 2. Click **+ New integration**.
 3. Choose your **Workspace** and give it a name like `AutoDesk AI`.
 4. Click **Submit** and copy the **Internal Integration Token** (starts with `ntn_`).
-5. Paste this into your `.env` as `VITE_NOTION_API_KEY`.
+5. Paste this into your `.env` as `NOTION_API_KEY`. (Do not use `VITE_` prefix to keep it secure).
 
 #### 📂 2. Create the Task Database
 
@@ -57,7 +57,7 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 2. Observe the URL: `https://www.notion.so/[workspace]/[database_id]?v=[view_id]`
 3. The **Database ID** is the 32-character string *before* the `?v=` and *after* the final `/`.
    - *Example:* `a8aec43384f447edbbdd3039e1428c03`
-4. Paste this into your `.env` as `VITE_NOTION_DATABASE_ID`.
+4. Paste this into your `.env` as `NOTION_DATABASE_ID`. (Do not use `VITE_` prefix to keep it secure).
 
 #### 🤝 4. Share with your Integration
 
@@ -73,9 +73,12 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_NOTION_API_KEY` | 🔑 Notion integration token (starts with `ntn_`) |
-| `VITE_NOTION_DATABASE_ID` | 🗄️ Database ID from Notion URL (32-char hex string) |
-| `VITE_GROQ_API_KEY` | 🤖 Groq API key for AI processing |
+| `NOTION_API_KEY` | 🔑 Internal Notion integration token |
+| `NOTION_DATABASE_ID` | 🗄️ Database ID from Notion URL (32-char hex string) |
+| `GROQ_API_KEY` | 🤖 Groq API key for AI processing |
+
+> [!IMPORTANT]
+> To maintain the **High-Security Architecture**, these variables must **NOT** have the `VITE_` prefix. This ensures they are handled exclusively by your backend proxy and never reach the user's browser. When deploying to Vercel, ensure you add these in the Vercel Dashboard under **Settings > Environment Variables**.
 
 ---
 
