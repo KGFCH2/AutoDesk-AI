@@ -51,11 +51,9 @@ async function fetchTasks(dbId: string, showHistory: boolean = false): Promise<N
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "POST",
     },
-    body: JSON.stringify({
-      method: "POST",
-      body: body,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -92,23 +90,22 @@ async function classifyTask(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-HTTP-Method-Override": "POST",
       },
       body: JSON.stringify({
-        body: {
-          model: "llama-3.1-8b-instant",
-          messages: [
-            {
-              role: "system",
-              content: `You are a task classifier. Given a task description, classify it and return a JSON with:
+        model: model,
+        messages: [
+          {
+            role: "system",
+            content: `You are a task classifier. Given a task description, classify it and return a JSON with:
 - "action": one of "generate_content", "search_web", "summarize", "analyze"
 - "details": a brief plan of what to do
 
 Return ONLY valid JSON, no markdown.`,
-            },
-            { role: "user", content: `Classify this task: ${task}` },
-          ],
-          temperature: 0,
-        }
+          },
+          { role: "user", content: `Classify this task: ${task}` },
+        ],
+        temperature: 0,
       }),
     }
   );
@@ -149,21 +146,20 @@ async function executeTask(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "POST",
     },
     body: JSON.stringify({
-      body: {
-        model: model,
-        messages: [
-          {
-            role: "system",
-            content: systemPrompts[action] || systemPrompts.generate_content,
-          },
-          {
-            role: "user",
-            content: `Task: ${task}\nPlan: ${details}\n\nExecute this task and provide the result.`,
-          },
-        ],
-      }
+      model: model,
+      messages: [
+        {
+          role: "system",
+          content: systemPrompts[action] || systemPrompts.generate_content,
+        },
+        {
+          role: "user",
+          content: `Task: ${task}\nPlan: ${details}\n\nExecute this task and provide the result.`,
+        },
+      ],
     }),
   });
 
@@ -187,14 +183,12 @@ async function updateNotionTask(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "PATCH",
     },
     body: JSON.stringify({
-      method: "PATCH",
-      body: {
-        properties: {
-          Status: { status: { name: "Done" } },
-        },
-      }
+      properties: {
+        Status: { status: { name: "Done" } },
+      },
     }),
   });
 
@@ -204,26 +198,24 @@ async function updateNotionTask(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "PATCH",
     },
     body: JSON.stringify({
-      method: "PATCH",
-      body: {
-        children: [
-          {
-            object: "block",
-            type: "callout",
-            callout: {
-              icon: { type: "emoji", emoji: "🤖" },
-              rich_text: [
-                {
-                  type: "text",
-                  text: { content: `AutoDesk AI Output (via Groq):\n${truncated}` },
-                },
-              ],
-            },
+      children: [
+        {
+          object: "block",
+          type: "callout",
+          callout: {
+            icon: { type: "emoji", emoji: "🤖" },
+            rich_text: [
+              {
+                type: "text",
+                text: { content: `AutoDesk AI Output (via Groq):\n${truncated}` },
+              },
+            ],
           },
-        ],
-      }
+        },
+      ],
     }),
   });
 }
