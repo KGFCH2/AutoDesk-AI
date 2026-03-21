@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, ChevronRight, Database, Key, Zap, Bot, Mail, Github, Linkedin, ChevronDown, CheckCircle, ZapIcon, ArrowRightIcon, BotIcon, LayoutDashboard, FileText, Menu, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronRight, Database, Key, Zap, Bot, Mail, Github, Linkedin, ChevronDown, CheckCircle, ZapIcon, ArrowRightIcon, BotIcon, LayoutDashboard, FileText, Menu, X, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button.variants";
@@ -121,12 +121,11 @@ const NotionAppMockup = () => (
     whileInView={{ opacity: 1, y: 0 }}
     whileHover={{
       scale: 1.05,
-      rotateX: -5,
-      rotateY: 8,
-      boxShadow: "0 20px 80px rgba(34,197,94,0.3), 0 0 40px rgba(34,197,94,0.1)"
+      y: -8,
+      boxShadow: "0 25px 90px -15px rgba(34,197,94,0.25), 0 10px 40px -10px rgba(34,197,94,0.15)"
     }}
     viewport={{ once: true }}
-    className="w-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-3xl overflow-hidden shadow-2xl relative group md:rotate-y-12 perspective-1000 transition-all duration-500 cursor-pointer"
+    className="w-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-3xl overflow-hidden shadow-2xl relative group transition-all duration-500 cursor-pointer"
   >
     <div className="flex items-center gap-2 px-6 py-4 bg-white/5 border-b border-white/10">
       <div className="flex gap-2">
@@ -183,8 +182,6 @@ const NotionAppMockup = () => (
 );
 
 const FeatureSection = ({ feature, index, isLast }: { feature: { title: string, description: string, badgeText: string, image: string }, index: number, isLast: boolean }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -238,23 +235,11 @@ const FeatureSection = ({ feature, index, isLast }: { feature: { title: string, 
         </h2>
 
         <div className="space-y-4">
-          <motion.p
-            initial={false}
-            animate={{ height: isExpanded ? "auto" : "4.5em" }}
-            className="text-base md:text-xl text-muted-foreground leading-relaxed font-medium overflow-hidden group-hover/text:text-foreground transition-colors"
-          >
+          <p className="text-base md:text-xl text-muted-foreground leading-relaxed font-medium group-hover/text:text-foreground transition-colors overflow-visible">
             {feature.description}
-          </motion.p>
+          </p>
 
           <div className="flex flex-col lg:flex-row items-center gap-6 pt-4 justify-center lg:justify-start">
-            <Button
-              variant="ghost"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="text-primary font-black hover:bg-primary/20 hover:text-white uppercase tracking-widest text-xs group transition-all"
-            >
-              {isExpanded ? "Read Less" : "Read More"}
-              <ChevronRight className={cn("ml-2 h-4 w-4 transition-transform", isExpanded ? "-rotate-90" : "rotate-90")} />
-            </Button>
             <div className="h-px w-24 bg-gradient-to-r from-primary/40 to-transparent hidden lg:block group-hover/text:w-32 transition-all duration-700" />
           </div>
         </div>
@@ -399,21 +384,29 @@ export default function Home() {
         <section className="max-w-7xl mx-auto px-4 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
             <div className="space-y-12 sticky top-32">
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <h2 className="text-3xl md:text-6xl font-black tracking-tighter">Connection Guide</h2>
-                <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-                  Setting up your autonomous engine takes less than 2 minutes. Follow these steps to bridge your Notion workspace with our AI.
+                <p className="text-muted-foreground text-sm md:text-lg leading-relaxed font-comic">
+                  Setting up your autonomous engine takes less than 2 minutes. Our platform uses a high-security backend proxy architecture, meaning your keys remain encrypted and are never exposed to the frontend browser environment.
                 </p>
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20 text-[10px] font-black tracking-widest uppercase text-primary">
+                  <ShieldCheck className="w-3 h-3" />
+                  Verified Zero-Leak Proxy
+                </div>
               </div>
-              <div className="space-y-4">
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/5 space-y-4">
-                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                    <FileText className="w-4 h-4" /> Quick Config Snippet
+              <div className="space-y-6">
+                <div className="p-8 rounded-[2rem] bg-white/5 border border-white/5 space-y-6">
+                  <div className="flex items-center gap-2 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+                    <FileText className="w-4 h-4 text-primary" /> Config Documentation
                   </div>
-                  <code className="text-[11px] text-primary block bg-black/40 p-4 rounded-xl font-mono leading-relaxed border border-white/5">
+                  <code className="text-[11px] text-primary block bg-black/60 p-6 rounded-2xl font-mono leading-relaxed border border-white/5 shadow-inner">
                     NOTION_API_KEY=secret_...<br />
-                    DATABASE_ID=8c3d...
+                    NOTION_DATABASE_ID=8c3d...<br />
+                    GROQ_API_KEY=gsk_...
                   </code>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed font-medium">
+                    Ensure these variables are placed in your root .env file without the VITE_ prefix for maximum security during production deployment.
+                  </p>
                 </div>
               </div>
             </div>
