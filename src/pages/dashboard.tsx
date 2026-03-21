@@ -36,18 +36,18 @@ const Index = () => {
       <div className="container py-12 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         
         {/* Command Center Hero */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-black/40 border border-white/5 rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 bg-black/40 border border-white/5 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
-          <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 max-w-2xl">
-            <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-black tracking-widest uppercase text-primary">
-              <Cpu className="w-3 h-3 animate-pulse" />
+          <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left space-y-4 max-w-2xl">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-black tracking-widest uppercase text-primary">
+              <Cpu className="w-2.5 h-2.5 animate-pulse" />
               <span>Neural Engine 01 - Online</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-foreground tracking-tight leading-none">
+            <h1 className="text-2xl md:text-4xl font-black text-foreground tracking-tight leading-none">
               Mission <br />
               <span className="text-math-gradient">Control Center</span>
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground font-medium leading-relaxed font-comic">
+            <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed font-comic">
               Orchestrate your autonomous agents, monitor real-time execution, and analyze production intelligence from one unified interface.
             </p>
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
@@ -81,63 +81,77 @@ const Index = () => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.1 }}
-                    className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 flex flex-col items-center gap-3 group/stat hover:bg-white/[0.05] transition-all cursor-default"
+                    className="p-4 md:p-5 rounded-[1.5rem] bg-white/[0.03] border border-white/5 flex flex-col items-center gap-2 group/stat hover:bg-white/[0.05] transition-all cursor-default"
                   >
-                    <div className={cn("p-3 rounded-2xl transition-transform group-hover/stat:rotate-12", stat.bg)}>
-                       <stat.icon className={cn("w-6 h-6", stat.color)} />
+                    <div className={cn("p-2 rounded-xl transition-transform group-hover/stat:rotate-12", stat.bg)}>
+                       <stat.icon className={cn("w-5 h-5", stat.color)} />
                     </div>
-                    <div className="text-2xl font-black text-foreground">{stat.value}</div>
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</div>
+                    <div className="text-xl md:text-2xl font-black text-foreground">{stat.value}</div>
+                    <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</div>
                   </motion.div>
                 ))}
              </div>
           </div>
         </div>
 
-        {/* Main Dashboard Grid */}
+        {/* Swapped Sidebar & Results Logic */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Status & Results */}
-          <div className="lg:col-span-8 space-y-8">
+          {/* Main Activity Area (Now on the left) */}
+          <div className="lg:col-span-8 space-y-6">
+             <ActivityLog logs={logs} />
+             
+             {/* Secondary Card (Mission Logs now moved here) */}
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <motion.div 
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="group relative cursor-pointer h-full"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-purple-500/50 rounded-[2rem] blur opacity-20 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
+                    <div className="relative p-6 rounded-[2rem] bg-black/60 border border-white/10 flex flex-col items-center justify-center text-center gap-4 h-full">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center ring-4 ring-primary/5">
+                          <Search className="w-6 h-6 text-primary transition-transform group-hover:scale-110" />
+                      </div>
+                      <div className="space-y-1">
+                          <h2 className="text-lg font-black text-foreground">Mission Logs</h2>
+                          <p className="text-xs font-medium text-muted-foreground font-comic">Historically completed tasks viewer.</p>
+                      </div>
+                    </div>
+                </motion.div>
+
+                <div className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 flex flex-col items-center justify-center text-center gap-3">
+                   <ShieldCheck className="w-10 h-10 text-primary/40" />
+                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Encrypted Proxy — 100% Online</div>
+                </div>
+             </div>
+          </div>
+
+          {/* Sidebar & Systems Status Area (Now on the right) */}
+          <div className="lg:col-span-4 space-y-6">
              <ResultsPanel results={results} />
              {results.length === 0 && (
-               <div className="rounded-[2.5rem] border border-white/5 bg-black/20 p-20 flex flex-col items-center justify-center text-center gap-6">
-                  <div className="p-6 rounded-full bg-white/5 border border-white/10">
-                    <Globe className="w-12 h-12 text-muted-foreground/40 animate-pulse" />
+               <div className="rounded-[2rem] border border-white/5 bg-black/20 p-8 flex flex-col items-center justify-center text-center gap-4 min-h-[300px]">
+                  <div className="p-3 rounded-full bg-white/5 border border-white/10">
+                    <Globe className="w-8 h-8 text-muted-foreground/40 animate-pulse" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-foreground italic">System Idle — Awaiting Input</h3>
-                    <p className="text-muted-foreground font-comic max-w-sm">
-                      Initialize the neural bridge by scanning your Notion workspace for pending missions.
+                    <h3 className="text-lg font-black text-foreground italic">Awaiting Input</h3>
+                    <p className="text-xs text-muted-foreground font-comic max-w-[200px] mx-auto">
+                      Scan your Notion workspace for pending missions.
                     </p>
                   </div>
                </div>
              )}
-          </div>
-
-          {/* Sidebar Area */}
-          <div className="lg:col-span-4 space-y-8">
-             <ActivityLog logs={logs} />
              
-             <motion.div 
-               whileHover={{ scale: 1.02 }}
-               whileTap={{ scale: 0.98 }}
-               className="group relative cursor-pointer"
-               onClick={() => setIsModalOpen(true)}
-             >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-purple-500/50 rounded-[2.5rem] blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-                <div className="relative p-10 rounded-[2.5rem] bg-black/60 border border-white/10 flex flex-col items-center text-center gap-6">
-                   <div className="w-20 h-20 rounded-[2rem] bg-primary/10 flex items-center justify-center ring-4 ring-primary/5">
-                      <Search className="w-10 h-10 text-primary transition-transform group-hover:scale-125" />
-                   </div>
-                   <div className="space-y-2">
-                      <h2 className="text-2xl font-black text-foreground">Mission Logs</h2>
-                      <p className="text-sm font-medium text-muted-foreground font-comic">Full visibility into your historically completed and pending tasks.</p>
-                   </div>
-                   <Button variant="outline" className="rounded-full px-8 py-6 font-black border-2 bg-white/5">
-                      Open Log Viewer
-                   </Button>
+             <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10 space-y-3">
+                <div className="flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-widest">
+                  <Activity className="w-3 h-3 h-auto" /> Output Analysis
                 </div>
-             </motion.div>
+                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                   <div className="h-full bg-primary animate-progress-fast" style={{ width: isRunning ? '60%' : '0%' }} title="AI Confidence" />
+                </div>
+             </div>
           </div>
         </div>
 
