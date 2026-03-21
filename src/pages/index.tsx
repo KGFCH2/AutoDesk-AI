@@ -126,7 +126,7 @@ const NotionAppMockup = () => (
       boxShadow: "0 20px 80px rgba(34,197,94,0.3), 0 0 40px rgba(34,197,94,0.1)"
     }}
     viewport={{ once: true }}
-    className="w-full rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-3xl overflow-hidden shadow-2xl relative group rotate-y-12 perspective-1000 transition-all duration-500 cursor-pointer"
+    className="w-full rounded-[1.5rem] md:rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-3xl overflow-hidden shadow-2xl relative group md:rotate-y-12 perspective-1000 transition-all duration-500 cursor-pointer"
   >
     <div className="flex items-center gap-2 px-6 py-4 bg-white/5 border-b border-white/10">
       <div className="flex gap-2">
@@ -136,7 +136,7 @@ const NotionAppMockup = () => (
       </div>
       <div className="text-[10px] text-muted-foreground/40 font-mono ml-6 tracking-widest uppercase">Intelligent Workspace v1.0</div>
     </div>
-    <div className="p-8 grid grid-cols-12 gap-8">
+    <div className="p-4 md:p-8 grid grid-cols-12 gap-4 md:gap-8">
       <div className="col-span-3 space-y-6 border-r border-white/5 pr-8 hidden md:block">
         <div className="space-y-2">
           {[1, 2, 3, 4].map((i) => (
@@ -229,7 +229,7 @@ const FeatureSection = ({ feature, index, isLast }: { feature: { title: string, 
       )}
 
       <div className="flex-1 space-y-8 z-10 text-center lg:text-left group/text">
-        <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight text-foreground group-hover/text:text-primary transition-colors duration-500 flex items-center justify-center lg:justify-start gap-4">
+        <h2 className="text-2xl md:text-5xl font-black tracking-tighter leading-tight text-foreground group-hover/text:text-primary transition-colors duration-500 flex items-center justify-center lg:justify-start gap-4">
           <span className="text-primary italic group-hover/text:rotate-12 group-hover/text:scale-125 transition-all duration-500 inline-block">#{index + 1}</span>
           {feature.title}
           <div className="hidden lg:block">
@@ -240,8 +240,8 @@ const FeatureSection = ({ feature, index, isLast }: { feature: { title: string, 
         <div className="space-y-4">
           <motion.p
             initial={false}
-            animate={{ height: isExpanded ? "auto" : "3em" }}
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed font-medium overflow-hidden group-hover/text:text-foreground transition-colors"
+            animate={{ height: isExpanded ? "auto" : "4.5em" }}
+            className="text-base md:text-xl text-muted-foreground leading-relaxed font-medium overflow-hidden group-hover/text:text-foreground transition-colors"
           >
             {feature.description}
           </motion.p>
@@ -296,8 +296,8 @@ export default function Home() {
 
         {/* Modern Hero Section */}
         {/* Modern Hero Section */}
-        <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col lg:flex-row items-center justify-between gap-16 px-6 md:px-12 max-w-[1800px] mx-auto z-10">
-          <div className="w-full lg:w-[420px] lg:flex-none space-y-8 text-center lg:text-left lg:-translate-x-20 transition-all duration-1000">
+        <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col lg:flex-row items-center justify-between gap-16 px-4 md:px-12 max-w-[1800px] mx-auto z-10 overflow-hidden">
+          <div className="w-full lg:w-1/2 lg:flex-none space-y-8 text-center lg:text-left transition-all duration-1000">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -311,10 +311,10 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="text-4xl md:text-7xl font-black leading-[1.1] md:leading-[0.95] text-foreground tracking-normal"
+              className="text-4xl md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-[1.1] text-foreground tracking-tight"
             >
-              Notion <br />
-              <span className="text-primary italic pr-4 font-comic text-4xl md:text-7xl inline-block mt-2 md:mt-0">Autonomous</span> <br className="hidden md:block" />
+              Notion <br className="md:hidden" />
+              <span className="text-primary italic font-comic text-4xl md:text-7xl lg:text-8xl inline-block mt-2 md:mt-0">Autonomous</span> <br />
               Agents
             </motion.h1>
 
@@ -322,7 +322,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="max-w-[600px] text-lg md:text-xl text-muted-foreground font-medium leading-relaxed mx-auto lg:mx-0 font-comic"
+              className="max-w-[600px] text-base md:text-xl text-muted-foreground font-medium leading-relaxed mx-auto lg:mx-0 font-comic"
             >
               Bridge the gap between planning and execution. Read tasks, understand context, and produce results—automatically.
             </motion.p>
@@ -333,18 +333,18 @@ export default function Home() {
               transition={{ delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4"
             >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                 <Link
                   to="/dashboard"
-                  className={cn(buttonVariants({ size: "lg" }), "rounded-full px-12 py-8 font-black text-xl hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] transition-all flex items-center shadow-lg")}
+                  className={cn(buttonVariants({ size: "lg" }), "rounded-full px-8 md:px-12 py-6 md:py-8 font-black text-lg md:text-xl hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] transition-all flex items-center justify-center shadow-lg w-full")}
                 >
-                  Launch Agent <ArrowRight className="ml-3 h-6 w-6" />
+                  Launch Agent <ArrowRight className="ml-3 h-5 w-5 md:h-6 md:w-6" />
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                 <Link
                   to="/docs"
-                  className={cn(buttonVariants({ size: "lg", variant: "outline" }), "rounded-full px-12 py-8 font-black text-xl bg-white/5 backdrop-blur-md border-2 flex items-center shadow-lg")}
+                  className={cn(buttonVariants({ size: "lg", variant: "outline" }), "rounded-full px-8 md:px-12 py-6 md:py-8 font-black text-lg md:text-xl bg-white/5 backdrop-blur-md border-2 flex items-center justify-center shadow-lg w-full")}
                 >
                   Read Documentation
                 </Link>
@@ -352,7 +352,7 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <div className="flex-1 w-full min-w-0 relative perspective-1000 group lg:scale-[1.15] lg:translate-x-20 transition-all duration-1000">
+          <div className="flex-1 w-full min-w-0 relative perspective-1000 group lg:scale-[1.1] transition-all duration-1000">
             <div className="absolute -inset-10 bg-primary/20 blur-[150px] rounded-full pointer-events-none opacity-40 animate-pulse group-hover:opacity-60 transition-opacity" />
             <div className="relative transform-gpu">
               <NotionAppMockup />
@@ -376,8 +376,8 @@ export default function Home() {
         <section className="bg-black/20 py-32 border-y border-white/5">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center space-y-4 mb-20">
-              <h2 className="text-4xl md:text-6xl font-black tracking-tighter">The Paradigm Shift</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+              <h2 className="text-3xl md:text-6xl font-black tracking-tighter">The Paradigm Shift</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg leading-relaxed px-4">
                 We're not just another productivity tool. We're the layer that turns your static goals into actual production.
               </p>
             </div>
@@ -400,8 +400,8 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
             <div className="space-y-12 sticky top-32">
               <div className="space-y-4">
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter">Connection Guide</h2>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+                <h2 className="text-3xl md:text-6xl font-black tracking-tighter">Connection Guide</h2>
+                <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
                   Setting up your autonomous engine takes less than 2 minutes. Follow these steps to bridge your Notion workspace with our AI.
                 </p>
               </div>
