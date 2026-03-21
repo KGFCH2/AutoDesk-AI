@@ -11,20 +11,22 @@ export default defineConfig(() => ({
       overlay: false,
     },
     proxy: {
-      "/api-notion": {
+      "/api/notion": {
         target: "https://api.notion.com/v1",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-notion/, ""),
-        configure: (proxy, options) => {
-          proxy.on('proxyReq', (proxyReq, req, res) => {
-            console.log('Proxying request to:', proxyReq.protocol + '//' + proxyReq.host + proxyReq.path);
-          });
+        rewrite: (path) => path.replace(/^\/api\/notion/, ""),
+        headers: {
+          'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+          'Notion-Version': '2022-06-28'
         }
       },
-      "/api-groq": {
+      "/api/groq": {
         target: "https://api.groq.com/openai/v1",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-groq/, ""),
+        rewrite: (path) => path.replace(/^\/api\/groq/, ""),
+        headers: {
+          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+        }
       },
     },
   },
