@@ -19,10 +19,10 @@ const Index = () => {
     const total = tasks.length;
     const completed = tasks.filter(t => t.status === "Done" || t.status === "Completed").length;
     const pending = tasks.filter(t => t.status === "To Do" || t.status === "Pending" || t.status === "In Progress").length;
-    const successRate = results.length > 0 
-      ? Math.round((results.filter(r => r.status === "completed").length / results.length) * 100) 
+    const successRate = results.length > 0
+      ? Math.round((results.filter(r => r.status === "completed").length / results.length) * 100)
       : 100;
-    
+
     return [
       { label: "Active Engine", value: isRunning ? "Running" : "Idle", icon: Zap, color: "text-primary", bg: "bg-primary/10" },
       { label: "Total Tasks", value: total, icon: Server, color: "text-blue-400", bg: "bg-blue-400/10" },
@@ -34,7 +34,7 @@ const Index = () => {
   return (
     <Layout>
       <div className="container py-12 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-        
+
         {/* Command Center Hero */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 bg-black/40 border border-white/5 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
@@ -51,46 +51,46 @@ const Index = () => {
               Orchestrate your autonomous agents, monitor real-time execution, and analyze production intelligence from one unified interface.
             </p>
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-               <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="rounded-full px-8 py-7 font-black text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all w-full sm:w-auto"
                 onClick={runAgent}
                 disabled={isRunning}
-               >
-                 {isRunning ? <Zap className="mr-2 animate-spin" /> : <Zap className="mr-2 h-5 w-5" />}
-                 Force Engine Start
-               </Button>
-               <Button 
-                variant="outline" 
-                size="lg" 
+              >
+                {isRunning ? <Zap className="mr-2 animate-spin" /> : <Zap className="mr-2 h-5 w-5" />}
+                Force Engine Start
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
                 className="rounded-full px-8 py-7 font-black text-lg border-2 bg-white/5 backdrop-blur-md w-full sm:w-auto"
                 onClick={fetchTasks}
                 disabled={isFetching}
-               >
-                 <Activity className={cn("mr-2 h-5 w-5", isFetching && "animate-spin")} />
-                 Scan Notion DB
-               </Button>
+              >
+                <Activity className={cn("mr-2 h-5 w-5", isFetching && "animate-spin")} />
+                Scan Notion DB
+              </Button>
             </div>
           </div>
 
           <div className="relative flex-1 w-full max-w-md hidden lg:block">
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {stats.map((stat, i) => (
-                  <motion.div 
-                    key={stat.label}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="p-4 md:p-5 rounded-[1.5rem] bg-white/[0.03] border border-white/5 flex flex-col items-center gap-2 group/stat hover:bg-white/[0.05] transition-all cursor-default"
-                  >
-                    <div className={cn("p-2 rounded-xl transition-transform group-hover/stat:rotate-12", stat.bg)}>
-                       <stat.icon className={cn("w-5 h-5", stat.color)} />
-                    </div>
-                    <div className="text-xl md:text-2xl font-black text-foreground">{stat.value}</div>
-                    <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</div>
-                  </motion.div>
-                ))}
-             </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {stats.map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="p-4 md:p-5 rounded-[1.5rem] bg-white/[0.03] border border-white/5 flex flex-col items-center gap-2 group/stat hover:bg-white/[0.05] transition-all cursor-default"
+                >
+                  <div className={cn("p-2 rounded-xl transition-transform group-hover/stat:rotate-12", stat.bg)}>
+                    <stat.icon className={cn("w-5 h-5", stat.color)} />
+                  </div>
+                  <div className="text-xl md:text-2xl font-black text-foreground">{stat.value}</div>
+                  <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -98,74 +98,74 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: Activity Log */}
           <div className="lg:col-span-8">
-             <ActivityLog 
-                logs={logs} 
-                className="h-[460px] border-primary/20 bg-black/40 backdrop-blur-xl"
-                consoleClassName="h-[360px]" 
-             />
+            <ActivityLog
+              logs={logs}
+              className="h-[460px] border-primary/20 bg-black/40 backdrop-blur-xl"
+              consoleClassName="h-[360px]"
+            />
           </div>
 
           {/* Right Column: Combined Status Area */}
           <div className="lg:col-span-4 flex flex-col gap-4 h-[460px]">
-             {/* Dynamic Status Box - Automatically fits remaining space */}
-             <div className="flex-1 min-h-0">
-                {results.length > 0 ? (
-                  <div className="h-full overflow-y-auto w-full rounded-xl border border-white/5 bg-black/40">
-                    <ResultsPanel results={results} />
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-white/5 bg-black/20 p-6 flex flex-col items-center justify-center text-center gap-4 h-full relative overflow-hidden group">
-                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
-                     <div className="p-3 rounded-full bg-white/5 border border-white/10 relative z-10">
-                       <Globe className="w-7 h-7 text-muted-foreground/40 animate-pulse" />
-                     </div>
-                     <div className="space-y-1.5 relative z-10">
-                       <h3 className="text-lg font-black text-foreground italic">Awaiting Input</h3>
-                       <p className="text-xs text-muted-foreground font-comic max-w-[200px] mx-auto">
-                         Scan your Notion workspace for pending missions.
-                       </p>
-                     </div>
-                     <div className="mt-2 pt-3 border-t border-white/5 w-full">
-                        <div className="flex items-center justify-center gap-2 text-[9px] font-black text-primary uppercase tracking-widest animate-pulse">
-                          <Activity className="w-2.5 h-2.5 h-auto" /> Engine Ready
-                        </div>
-                     </div>
-                  </div>
-                )}
-             </div>
-             
-             {/* Mission Logs Button - Fixed at bottom within the same height container */}
-             <button 
-                onClick={() => setIsModalOpen(true)}
-                className="w-full p-4 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between group hover:bg-primary/20 transition-all h-[64px]"
-             >
-                <div className="flex items-center gap-3">
-                   <div className="p-1.5 rounded-lg bg-primary/20">
-                      <Search className="w-3.5 h-3.5 text-primary" />
-                   </div>
-                   <div className="text-left">
-                      <div className="text-xs font-black text-foreground tracking-tight">Mission Logs</div>
-                      <div className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter">Historic task data</div>
-                   </div>
+            {/* Dynamic Status Box - Automatically fits remaining space */}
+            <div className="flex-1 min-h-0">
+              {results.length > 0 ? (
+                <div className="h-full overflow-y-auto w-full rounded-xl border border-white/5 bg-black/40">
+                  <ResultsPanel results={results} />
                 </div>
-                <div className="text-primary opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
-                   →
+              ) : (
+                <div className="rounded-xl border border-white/5 bg-black/20 p-6 flex flex-col items-center justify-center text-center gap-4 h-full relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                  <div className="p-3 rounded-full bg-white/5 border border-white/10 relative z-10">
+                    <Globe className="w-7 h-7 text-muted-foreground/40 animate-pulse" />
+                  </div>
+                  <div className="space-y-1.5 relative z-10">
+                    <h3 className="text-lg font-black text-foreground italic">Awaiting Input</h3>
+                    <p className="text-xs text-muted-foreground font-comic max-w-[200px] mx-auto">
+                      Scan your Notion workspace for pending missions.
+                    </p>
+                  </div>
+                  <div className="mt-2 pt-3 border-t border-white/5 w-full">
+                    <div className="flex items-center justify-center gap-2 text-[9px] font-black text-primary uppercase tracking-widest animate-pulse">
+                      <Activity className="w-2.5 h-2.5" /> Engine Ready
+                    </div>
+                  </div>
                 </div>
-             </button>
+              )}
+            </div>
+
+            {/* Mission Logs Button - Fixed at bottom within the same height container */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full p-4 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between group hover:bg-primary/20 transition-all h-[64px]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-1.5 rounded-lg bg-primary/20">
+                  <Search className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <div className="text-left">
+                  <div className="text-xs font-black text-foreground tracking-tight">Mission Logs</div>
+                  <div className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter">Historic task data</div>
+                </div>
+              </div>
+              <div className="text-primary opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                →
+              </div>
+            </button>
           </div>
         </div>
 
         <AnimatePresence>
           {isModalOpen && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsModalOpen(false)}
                 className="absolute inset-0 bg-black/80 backdrop-blur-xl"
               />
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -184,20 +184,20 @@ const Index = () => {
                 </div>
 
                 <div className="p-8 flex gap-4 bg-white/[0.01]">
-                   <Button 
-                    variant={!showHistory ? "secondary" : "ghost"} 
+                  <Button
+                    variant={!showHistory ? "secondary" : "ghost"}
                     className={cn("rounded-2xl px-8 font-black transition-all", !showHistory ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "")}
                     onClick={() => setShowHistory(false)}
-                   >
-                     Pending Tasks
-                   </Button>
-                   <Button 
-                    variant={showHistory ? "secondary" : "ghost"} 
+                  >
+                    Pending Tasks
+                  </Button>
+                  <Button
+                    variant={showHistory ? "secondary" : "ghost"}
                     className={cn("rounded-2xl px-8 font-black transition-all", showHistory ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "")}
                     onClick={() => setShowHistory(true)}
-                   >
-                     Historical Timeline
-                   </Button>
+                  >
+                    Historical Timeline
+                  </Button>
                 </div>
 
                 <div className="flex-1 overflow-hidden p-8 pt-0">
