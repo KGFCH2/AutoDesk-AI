@@ -2,7 +2,7 @@
 
 **Designed and Developed by [Babin Bid](https://github.com/KGFCH2)**
 
-## 1. 👤 Developer & Project Context
+## 1. 🧑‍💻 Developer & Project Context
 
 This project was built by **Babin Bid** to demonstrate advanced integration between Notion and AI processors. It is intended for technical knowledge gain and architectural exploration.
 

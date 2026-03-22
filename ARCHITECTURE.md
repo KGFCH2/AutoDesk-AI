@@ -6,20 +6,50 @@ This document describes the high-level architecture of the AutoDesk AI execution
 
 ```mermaid
 graph TD
-    User((User)) -->|Creates Task| Notion[Notion Database]
-    Sub[Mission Control Dashboard] -->|Agent Request| Proxy[Secure API Proxy /api/*]
-    Proxy -->|Fetch Tasks| Notion
+    %% Define Styles
+    classDef user fill:#3b82f6,stroke:#1e3a8a,stroke-width:2px,color:#fff,rx:10,ry:10
+    classDef frontend fill:#10b981,stroke:#065f46,stroke-width:2px,color:#fff,rx:10,ry:10
+    classDef proxy fill:#f43f5e,stroke:#9f1239,stroke-width:4px,color:#fff,stroke-dasharray: 5 5,rx:15,ry:15
+    classDef notion fill:#eab308,stroke:#854d0e,stroke-width:2px,color:#000,rx:10,ry:10
+    classDef ai fill:#a855f7,stroke:#6b21a8,stroke-width:2px,color:#fff,rx:10,ry:10
+
+    subgraph "👤 User Workspace"
+        User((User Context)):::user
+        Notion[(Notion Task DB)]:::notion
+    end
+
+    subgraph "🎨 Mission Control (Frontend)"
+        Sub[Dashboard UI]:::frontend
+        Modal[Analysis Modal]:::frontend
+        Hook[useAgent Logic]:::frontend
+    end
+
+    subgraph "🛡️ Neural Bridge (Proxy)"
+        Proxy[Secure API Gate /api/*]:::proxy
+    end
+
+    subgraph "🧠 AI Intelligence Layer"
+        GroqFast[Llama-3.1-8b]:::ai
+        GroqPower[Llama-3.3-70b]:::ai
+        Router{Action Router}:::ai
+    end
+
+    %% Connections
+    User -->|User Intent| Notion
+    Sub --> Hook
+    Hook -->|Zero-Key Request| Proxy
     
-    Proxy -->|Classify| GroqFast[Groq Llama-3.1-8b]
-    GroqFast -->|Result| Router{Action Router}
+    Proxy -->|Auth + Fetch| Notion
+    Proxy -->|Fast Classify| GroqFast
+    GroqFast --> Router
     
-    Router -->|Execution| Proxy
-    Proxy -->|Power| GroqPower[Groq Llama-3.3-70b]
-    GroqPower -->|Generated Result| Proxy
-    Proxy -->|Push Data| Notion
+    Router -->|Execution Strategy| GroqPower
+    GroqPower -->|Agent Result| Proxy
     
-    Proxy -->|Update Logs| Sub
-    Sub -->|Open| Modal[Task Intelligence Modal]
+    Proxy -->|Mark as Done| Notion
+    Proxy -->|Secure Results| Hook
+    Hook -->|Real-time Feed| Sub
+    Sub -->|Drill Down| Modal
 ```
 
 ## 📂 Component Overview
