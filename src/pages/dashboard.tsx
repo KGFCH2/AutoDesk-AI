@@ -94,64 +94,64 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Swapped Sidebar & Results Logic */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Main Activity Area (Now on the left) */}
-          <div className="lg:col-span-8 space-y-6">
-             <ActivityLog logs={logs} />
-             
-             {/* Secondary Card (Mission Logs now moved here) */}
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <motion.div 
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  className="group relative cursor-pointer h-full"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-purple-500/50 rounded-[2rem] blur opacity-20 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-                    <div className="relative p-6 rounded-[2rem] bg-black/60 border border-white/10 flex flex-col items-center justify-center text-center gap-4 h-full">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center ring-4 ring-primary/5">
-                          <Search className="w-6 h-6 text-primary transition-transform group-hover:scale-110" />
-                      </div>
-                      <div className="space-y-1">
-                          <h2 className="text-lg font-black text-foreground">Mission Logs</h2>
-                          <p className="text-xs font-medium text-muted-foreground font-comic">Historically completed tasks viewer.</p>
-                      </div>
-                    </div>
-                </motion.div>
-
-                <div className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 flex flex-col items-center justify-center text-center gap-3">
-                   <ShieldCheck className="w-10 h-10 text-primary/40" />
-                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Encrypted Proxy — 100% Online</div>
-                </div>
-             </div>
+        {/* Forced Total Vertical Symmetry - Matching Overall Heights */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Left Column: Activity Log */}
+          <div className="lg:col-span-8">
+             <ActivityLog 
+                logs={logs} 
+                className="h-[460px] border-primary/20 bg-black/40 backdrop-blur-xl"
+                consoleClassName="h-[360px]" 
+             />
           </div>
 
-          {/* Sidebar & Systems Status Area (Now on the right) */}
-          <div className="lg:col-span-4 space-y-6">
-             <ResultsPanel results={results} />
-             {results.length === 0 && (
-               <div className="rounded-[2rem] border border-white/5 bg-black/20 p-8 flex flex-col items-center justify-center text-center gap-4 min-h-[300px]">
-                  <div className="p-3 rounded-full bg-white/5 border border-white/10">
-                    <Globe className="w-8 h-8 text-muted-foreground/40 animate-pulse" />
+          {/* Right Column: Combined Status Area */}
+          <div className="lg:col-span-4 flex flex-col gap-4 h-[460px]">
+             {/* Dynamic Status Box - Automatically fits remaining space */}
+             <div className="flex-1 min-h-0">
+                {results.length > 0 ? (
+                  <div className="h-full overflow-y-auto w-full rounded-xl border border-white/5 bg-black/40">
+                    <ResultsPanel results={results} />
                   </div>
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-black text-foreground italic">Awaiting Input</h3>
-                    <p className="text-xs text-muted-foreground font-comic max-w-[200px] mx-auto">
-                      Scan your Notion workspace for pending missions.
-                    </p>
+                ) : (
+                  <div className="rounded-xl border border-white/5 bg-black/20 p-6 flex flex-col items-center justify-center text-center gap-4 h-full relative overflow-hidden group">
+                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                     <div className="p-3 rounded-full bg-white/5 border border-white/10 relative z-10">
+                       <Globe className="w-7 h-7 text-muted-foreground/40 animate-pulse" />
+                     </div>
+                     <div className="space-y-1.5 relative z-10">
+                       <h3 className="text-lg font-black text-foreground italic">Awaiting Input</h3>
+                       <p className="text-xs text-muted-foreground font-comic max-w-[200px] mx-auto">
+                         Scan your Notion workspace for pending missions.
+                       </p>
+                     </div>
+                     <div className="mt-2 pt-3 border-t border-white/5 w-full">
+                        <div className="flex items-center justify-center gap-2 text-[9px] font-black text-primary uppercase tracking-widest animate-pulse">
+                          <Activity className="w-2.5 h-2.5 h-auto" /> Engine Ready
+                        </div>
+                     </div>
                   </div>
-               </div>
-             )}
-             
-             <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10 space-y-3">
-                <div className="flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-widest">
-                  <Activity className="w-3 h-3 h-auto" /> Output Analysis
-                </div>
-                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                   <div className="h-full bg-primary animate-progress-fast" style={{ width: isRunning ? '60%' : '0%' }} title="AI Confidence" />
-                </div>
+                )}
              </div>
+             
+             {/* Mission Logs Button - Fixed at bottom within the same height container */}
+             <button 
+                onClick={() => setIsModalOpen(true)}
+                className="w-full p-4 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between group hover:bg-primary/20 transition-all h-[64px]"
+             >
+                <div className="flex items-center gap-3">
+                   <div className="p-1.5 rounded-lg bg-primary/20">
+                      <Search className="w-3.5 h-3.5 text-primary" />
+                   </div>
+                   <div className="text-left">
+                      <div className="text-xs font-black text-foreground tracking-tight">Mission Logs</div>
+                      <div className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter">Historic task data</div>
+                   </div>
+                </div>
+                <div className="text-primary opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                   →
+                </div>
+             </button>
           </div>
         </div>
 
