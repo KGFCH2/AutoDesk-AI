@@ -18,13 +18,15 @@ AutoDesk AI turns a Notion task database into an automated execution interface. 
 
 ### 📄 Pages overview
 
+| Route | Page Name | Description |
+| --- | --- | --- |
 | `/` | Home | Landing page with storytelling, features overview, and product mission |
 | `/dashboard` | Mission Control | Core agent control panel (tasks, logs, execution results) |
 | `/features` | Features | Detailed breakdown of the agent's capabilities and tech stack |
 | `/docs` | Docs | Comprehensive setup guide and FAQ knowledge base |
 | `/terms` | Terms of Service | Legal usage rules with icons and hover effects |
-| `/privacy` | Privacy Policy — data handling and credential policies |
-| `/faq` | FAQ — 10 questions in an accordion with icons |
+| `/privacy` | Privacy Policy | Data handling and credential policies |
+| `/faq` | FAQ | 10 questions in an accordion with icons |
 
 ### 🔄 Main user flow
 
